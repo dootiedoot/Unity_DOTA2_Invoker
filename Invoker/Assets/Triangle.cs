@@ -6,7 +6,9 @@ public class Triangle : MonoBehaviour
 	public bool canSpin = false;
 	public float distance = 1;
 	public float spinSpeed = 1;
-	public GameObject prefab;
+	public GameObject Quas;
+	public GameObject Wex;
+	public GameObject Exort;
 	public GameObject centerPrefab;
 
 	// Use this for initialization
@@ -26,8 +28,17 @@ public class Triangle : MonoBehaviour
 	{
 		for(int i = 0; i < 3; i++)
 		{
-			GameObject tempOBJ = Instantiate(prefab, centerPrefab.transform.forward * distance, Quaternion.identity) as GameObject;
-			tempOBJ.transform.SetParent(transform);
+			GameObject element = new GameObject("Element" + i.ToString());
+			element.transform.position = centerPrefab.transform.forward * distance;;
+			element.transform.SetParent(transform);
+
+			GameObject tempQuas = Instantiate(Quas, element.transform.position, Quaternion.identity) as GameObject;
+			tempQuas.transform.SetParent(element.transform);
+			GameObject tempWex = Instantiate(Wex, element.transform.position, Quaternion.identity) as GameObject;
+			tempWex.transform.SetParent(element.transform);
+			GameObject tempExort = Instantiate(Exort, element.transform.position, Quaternion.identity) as GameObject;
+			tempExort.transform.SetParent(element.transform);
+
 			centerPrefab.transform.Rotate(0, 120, 0);		
 		}
 	}
