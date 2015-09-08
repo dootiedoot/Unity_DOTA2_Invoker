@@ -4,7 +4,8 @@ using System.Collections;
 public class Triangle : MonoBehaviour 
 {
 	public bool canSpin = false;
-	public float distance = 1;
+	public float radius = 1;
+	public float heightOffset = 2;
 	public float spinSpeed = 1;
 	public GameObject Quas;
 	public GameObject Wex;
@@ -26,10 +27,10 @@ public class Triangle : MonoBehaviour
 
 	void createTriangle()
 	{
-		for(int i = 0; i < 3; i++)
+		for(int i = 1; i < 4; i++)
 		{
 			GameObject element = new GameObject("Element" + i.ToString());
-			element.transform.position = centerPrefab.transform.forward * distance;;
+			element.transform.position = centerPrefab.transform.forward * radius + transform.up * heightOffset;
 			element.transform.SetParent(transform);
 
 			GameObject tempQuas = Instantiate(Quas, element.transform.position, Quaternion.identity) as GameObject;
