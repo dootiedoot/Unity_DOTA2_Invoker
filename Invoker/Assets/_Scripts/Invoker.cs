@@ -82,7 +82,14 @@ public class Invoker : MonoBehaviour
 			{
 				Invoke();
 			}
-
+			else if(Input.GetKeyUp(KeyCode.D))
+			{
+				CastSpell(spells[0]);
+			}
+			else if(Input.GetKeyUp(KeyCode.F))
+			{
+				CastSpell(spells[1]);
+			}
 		}
 	}
 
@@ -174,7 +181,7 @@ public class Invoker : MonoBehaviour
 			Debug.Log("Invoked: " + spellName);
 		}
 	}
-
+	
 	void updateVisuals()
 	{
 		/*if(elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
@@ -237,6 +244,46 @@ public class Invoker : MonoBehaviour
 			E3Q.gameObject.SetActive(false);
 			E3W.gameObject.SetActive(false);
 			E3E.gameObject.SetActive(true);
+		}
+	}
+
+	void CastSpell(int spellNum)
+	{
+		switch (spellNum)
+		{
+			case 0:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 1:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 2:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 3:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 4:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 5:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 6:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 7:
+				Debug.Log("Cast: Forge Spirit");
+				break;
+			case 8:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			case 9:
+				print ("Ulg, glib, Pblblblblb");
+				break;
+			default:
+				print ("Invalid cast");
+				break;
 		}
 	}
 
