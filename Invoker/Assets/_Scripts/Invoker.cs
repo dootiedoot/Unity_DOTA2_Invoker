@@ -4,11 +4,13 @@ using System.Collections.Generic;
 
 public class Invoker : MonoBehaviour 
 {
-	public bool canAttack = true;
+	public bool canCast = true;
 	public bool isAttacking;
 	public int elementSize = 3;
 	public List<int> elements;
-	public GameObject[] spells;
+	public int spellsSize = 2;
+	public List<int> spells;
+	public GameObject[] spellPrefab;
 
 	public AudioClip invokeSound;
 	public AudioClip failSound;
@@ -74,69 +76,91 @@ public class Invoker : MonoBehaviour
 			updateVisuals();
 		}
 
-		if(canAttack)
+		if(canCast)
 		{
 			if(Input.GetKeyDown(KeyCode.R))
 			{
-				// 1 = Quas, 2 = Wex, 3 = Exort
-				if(elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
-					Debug.Log("Nothing to invoke");
-					audioSource.PlayOneShot(failSound, 1);
-				}
-				else
-				{
-					if(elements[0] == 1 && elements[1] == 1 && elements[2] == 1)
-					{
-						// QQQ
-						spellName = "Cold Snap";
-					}
-					else if((elements[0] == 1 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 1 && elements[1] == 2 && elements[2] == 1) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 1))
-					{
-						// QQW, QWQ, WQQ
-						spellName = "Ghost Walk";
-					}
-					else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 2 && elements[2] == 1))
-					{
-						// QWW, WQW, WWQ
-						spellName = "Tornado";
-					}
-					else if(elements[0] == 2 && elements[1] == 2 && elements[2] == 2)
-					{
-						// WWW
-						spellName = "EMP";
-					}				
-					else if((elements[0] == 2 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 2 && elements[1] == 3 && elements[2] == 2) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 2))
-					{
-						// WWE, WEW, EWW
-						spellName = "Alacrity";
-					}
-					else if((elements[0] == 2 && elements[1] == 3 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 3 && elements[2] == 2))
-					{
-						// WEE, EWE, EEW
-						spellName = "Chaos Meteor";
-					}
-					else if(elements[0] == 3 && elements[1] == 3 && elements[2] == 3)
-					{
-						// EEE
-						spellName = "Sun Strike";
-					}	
-					else if((elements[0] == 3 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 3 && elements[1] == 1 && elements[2] == 3) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 3))
-					{
-						// EEQ, EQE, QEE
-						spellName = "Forge Spirit";
-					}
-					else if((elements[0] == 3 && elements[1] == 1 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 1 && elements[2] == 3))
-					{
-						// EQQ, QEQ, QQE
-						spellName = "Ice Wall";
-					}
-					else
-					{
-						// QWE, QEW, WQE, WEQ, EQW, EWQ
-						spellName = "Deafening Blast";
-					}
-					// Incase there are more then 3 elements and Permutation is needed. Use Else instead to save code.
-					/*else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 3) || 
+				Invoke();
+			}
+
+		}
+	}
+
+	void Invoke()
+	{
+		// 1 = Quas, 2 = Wex, 3 = Exort
+		if(elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
+			Debug.Log("Nothing to invoke");
+			audioSource.PlayOneShot(failSound, 1);
+		}
+		else
+		{
+			if(elements[0] == 1 && elements[1] == 1 && elements[2] == 1)
+			{
+				// QQQ
+				spellName = "Cold Snap";
+				spells.Add(0);
+			}
+			else if((elements[0] == 1 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 1 && elements[1] == 2 && elements[2] == 1) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 1))
+			{
+				// QQW, QWQ, WQQ
+				spellName = "Ghost Walk";
+				spells.Add(1);
+			}
+			else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 2 && elements[2] == 1))
+			{
+				// QWW, WQW, WWQ
+				spellName = "Tornado";
+				spells.Add(2);
+			}
+			else if(elements[0] == 2 && elements[1] == 2 && elements[2] == 2)
+			{
+				// WWW
+				spellName = "EMP";
+				spells.Add(3);
+			}				
+			else if((elements[0] == 2 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 2 && elements[1] == 3 && elements[2] == 2) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 2))
+			{
+				// WWE, WEW, EWW
+				spellName = "Alacrity";
+				spells.Add(4);
+			}
+			else if((elements[0] == 2 && elements[1] == 3 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 3 && elements[2] == 2))
+			{
+				// WEE, EWE, EEW
+				spellName = "Chaos Meteor";
+				spells.Add(5);
+			}
+			else if(elements[0] == 3 && elements[1] == 3 && elements[2] == 3)
+			{
+				// EEE
+				spellName = "Sun Strike";
+				spells.Add(6);
+			}	
+			else if((elements[0] == 3 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 3 && elements[1] == 1 && elements[2] == 3) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 3))
+			{
+				// EEQ, EQE, QEE
+				spellName = "Forge Spirit";
+				spells.Add(7);
+			}
+			else if((elements[0] == 3 && elements[1] == 1 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 1 && elements[2] == 3))
+			{
+				// EQQ, QEQ, QQE
+				spellName = "Ice Wall";
+				spells.Add(8);
+			}
+			else
+			{
+				// QWE, QEW, WQE, WEQ, EQW, EWQ
+				spellName = "Deafening Blast";
+				spells.Add(9);
+			}
+
+			if(spells.Count > spellsSize){
+				spells.RemoveAt(0);
+			}
+			// Incase there are more then 3 elements and Permutation is needed. Use Else instead to save code.
+			/*else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 3) || 
 				        (elements[0] == 1 && elements[1] == 3 && elements[2] == 2) || 
 				        (elements[0] == 2 && elements[1] == 1 && elements[2] == 3) || 
 				        (elements[0] == 2 && elements[1] == 3 && elements[2] == 2) ||
@@ -146,13 +170,11 @@ public class Invoker : MonoBehaviour
 					// QWE, QEW, WQE, WEQ, EQW, EWQ
 					spellName = "Deafening Blast";
 					}*/
-					audioSource.PlayOneShot(invokeSound, 1);
-					Debug.Log("Invoked: " + spellName);
-				}
-			}
+			audioSource.PlayOneShot(invokeSound, 1);
+			Debug.Log("Invoked: " + spellName);
 		}
 	}
-	
+
 	void updateVisuals()
 	{
 		/*if(elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
@@ -217,6 +239,7 @@ public class Invoker : MonoBehaviour
 			E3E.gameObject.SetActive(true);
 		}
 	}
+
 	/*
 	IEnumerator castFlamethrower() 
 	{
@@ -260,9 +283,9 @@ public class Invoker : MonoBehaviour
 		temp.GetComponent<MudField>().DeathTimer = 10f;
 	}
 */
-	public bool CanAttack
+	public bool CanCast
 	{
-		get { return canAttack; }
-		set { canAttack = value; }
+		get { return canCast; }
+		set { canCast = value; }
 	}
 }
