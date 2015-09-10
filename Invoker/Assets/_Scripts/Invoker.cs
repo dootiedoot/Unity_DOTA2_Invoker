@@ -9,13 +9,10 @@ public class Invoker : MonoBehaviour
 	public List<int> elements;
 	public int spellsSize = 2;
 	public List<int> spells;
-	public GameObject[] spellPrefab;
 
 	public AudioClip invokeSound;
 	public AudioClip failSound;
-	public AudioClip coldSnapSound;
-	public AudioClip coldSnapImpactSound;
-
+	
 	private Transform E1Q;
 	private Transform E1W;
 	private Transform E1E;
@@ -26,14 +23,14 @@ public class Invoker : MonoBehaviour
 	private Transform E3W;
 	private Transform E3E;
 
-	private string spellName;
-
 	private AudioSource audioSource;
+	private Cast _cast;
 
 	// Use this for initialization
 	void Awake () 
 	{
 		audioSource = GetComponent<AudioSource>();
+		_cast = GetComponent<Cast>();
 	}
 
 	void Start()
@@ -110,6 +107,7 @@ public class Invoker : MonoBehaviour
 		}
 		else
 		{
+			string spellName;
 			if(elements[0] == 1 && elements[1] == 1 && elements[2] == 1)
 			{
 				// QQQ
@@ -262,7 +260,7 @@ public class Invoker : MonoBehaviour
 		switch (spellNum)
 		{
 			case 1:
-				StartCoroutine("castColdSnap");
+				_cast.CastColdSnap();
 				break;
 			case 2:
 				print ("Ulg, glib, Pblblblblb");
@@ -294,29 +292,6 @@ public class Invoker : MonoBehaviour
 			default:
 				print ("Invalid cast");
 				break;
-		}
-	}
-
-	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
-	// clicked, attach the Cold Snap script and associated properties.
-	IEnumerator castColdSnap()
-	{
-		while(!Input.GetButtonUp("Fire1"))
-		{
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-	
-			Physics.Raycast(ray, out hit);
-			if(hit.collider.CompareTag("Enemy") && Input.GetButtonDown("Fire1"))
-			{
-				//Vector3 newTarget = hit.point + new Vector3(0, 0.5f, 0);
-				Debug.Log("Casted: Cold Snap on " + hit.collider.name);
-				ColdSnap coldSnap = hit.collider.gameObject.AddComponent<ColdSnap>();
-				coldSnap.Duration = 5f;
-				coldSnap.ColdSnapSound = coldSnapSound;
-				coldSnap.ColdSnapImpactSound = coldSnapImpactSound;
-			}
-			yield return null;
 		}
 	}
 

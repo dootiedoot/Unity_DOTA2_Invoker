@@ -5,9 +5,10 @@ public class ClickToMove : MonoBehaviour
 {
 	public float shootDistance = 10f;
 	public float shootRate = .5f;
+	public GameObject misslePrefab;
 
 	private NavMeshAgent navMeshAgent;
-	private Transform targetedEnemy;
+	private GameObject target;
 	private Ray shootRay;
 	private RaycastHit shootHit;
 	private bool walking;
@@ -31,7 +32,7 @@ public class ClickToMove : MonoBehaviour
 			{
 				if (hit.collider.CompareTag("Enemy"))
 				{
-					targetedEnemy = hit.transform;
+					target = hit.collider.gameObject;
 					enemyClicked = true;
 				}
 				else
@@ -58,24 +59,24 @@ public class ClickToMove : MonoBehaviour
 	
 	private void MoveAndShoot()
 	{
-		if (targetedEnemy == null)
+		if (target == null)
 			return;
-		navMeshAgent.destination = targetedEnemy.position;
-		if (navMeshAgent.remainingDistance >= shootDistance) {
-			
+		navMeshAgent.destination = target.transform.position;
+		if (navMeshAgent.remainingDistance >= shootDistance) 
+		{
 			navMeshAgent.Resume();
 			walking = true;
 		}
 		
-		if (navMeshAgent.remainingDistance <= shootDistance) {
-			
-			transform.LookAt(targetedEnemy);
-			Vector3 dirToShoot = targetedEnemy.transform.position - transform.position;
+		if (navMeshAgent.remainingDistance <= shootDistance) 
+		{
+			transform.LookAt(target.transform);
+			Vector3 dirToShoot = target.transform.position - transform.position;
 			if (Time.time > nextFire)
 			{
 				nextFire = Time.time + shootRate;
-				Debug.Log("Shoot");
-				//shootingScript.Shoot(dirToShoot);
+				GameObject tempMissile = Instantiate(misslePrefab, transform.position + transform.up + transform.forward, Quaternion.identity) as GameObject;
+				tempMissile.GetComponent<Missile>().Target = target;
 			}
 			navMeshAgent.Stop();
 			walking = false;

@@ -30,7 +30,7 @@ public class Triangle : MonoBehaviour
 		for(int i = 1; i < 4; i++)
 		{
 			GameObject element = new GameObject("Element" + i.ToString());
-			element.transform.position = centerPrefab.transform.forward * radius + transform.up * heightOffset;
+			element.transform.position = centerPrefab.transform.position + centerPrefab.transform.forward * radius + transform.up * heightOffset;
 			element.transform.SetParent(transform);
 
 			GameObject tempQuas = Instantiate(Quas, element.transform.position, Quaternion.identity) as GameObject;

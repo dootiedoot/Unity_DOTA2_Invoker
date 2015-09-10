@@ -3,8 +3,9 @@ using System.Collections;
 
 public class ColdSnap : MonoBehaviour 
 {
-	private float tickCooldown;
 	private float duration;
+	private float tickCooldown;
+	private float tickDamage;
 
 	private AudioSource audioSource;
 
@@ -35,6 +36,16 @@ public class ColdSnap : MonoBehaviour
 	{
 		get { return duration; }
 		set { duration = value; }
+	}
+	public float TickCooldown
+	{
+		get { return tickCooldown; }
+		set { tickCooldown = value; }
+	}
+	public float TickDamage
+	{
+		get { return tickDamage; }
+		set { tickDamage = value; }
 	}
 	public AudioClip ColdSnapSound
 	{
