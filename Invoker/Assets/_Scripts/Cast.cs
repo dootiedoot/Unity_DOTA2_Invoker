@@ -7,6 +7,9 @@ public class Cast : MonoBehaviour
 	public float coldSnaptickCooldown;
 	public float coldSnaptickDamage;
 
+	public int GhostWalkEnemySlow;
+	public int GhostWalkSelfSlow;
+
 	public AudioClip coldSnapSound;
 	public AudioClip coldSnapImpactSound;
 	public AudioClip ghostWalkSound;
@@ -34,12 +37,16 @@ public class Cast : MonoBehaviour
 	// Public method to call the Cold Snap method
 	public void CastColdSnap()
 	{
-		StartCoroutine(castColdSnap(coldSnapDuration, coldSnaptickCooldown, coldSnaptickDamage));
+		StartCoroutine(ColdSnap(coldSnapDuration, coldSnaptickCooldown, coldSnaptickDamage));
+	}
+	public void CastGhostWalk()
+	{
+		StartCoroutine(GhostWalk(GhostWalkEnemySlow, GhostWalkSelfSlow));
 	}
 
 	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
 	// clicked, attach the Cold Snap script and associated properties.
-	IEnumerator castColdSnap(float duration, float tickCooldown, float tickDamage)
+	IEnumerator ColdSnap(float duration, float tickCooldown, float tickDamage)
 	{
 		while(!Input.GetButtonUp("Fire1"))
 		{
@@ -56,6 +63,30 @@ public class Cast : MonoBehaviour
 				coldSnap.TickDamage = tickDamage;
 				coldSnap.ColdSnapSound = coldSnapSound;
 				coldSnap.ColdSnapImpactSound = coldSnapImpactSound;
+			}
+			yield return null;
+		}
+	}
+
+	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
+	// clicked, attach the Cold Snap script and associated properties.
+	IEnumerator GhostWalk(int enemySlow, int selfSlow)
+	{
+		bool GhostWalk = true;
+		while(GhostWalk)
+		{
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (Input.GetButtonDown ("Fire2") && Physics.Raycast(ray, out hit, 100)) 
+			{
+				if (hit.collider.CompareTag("Enemy"))
+				{
+					GhostWalk = false;
+				}
+				else
+				{
+
+				}
 			}
 			yield return null;
 		}
