@@ -6,7 +6,6 @@ public class Invoker : MonoBehaviour
 {
 	public bool canCast = true;
 	public bool isAttacking;
-	public int elementSize = 3;
 	public List<int> elements;
 	public int spellsSize = 2;
 	public List<int> spells;
@@ -14,6 +13,8 @@ public class Invoker : MonoBehaviour
 
 	public AudioClip invokeSound;
 	public AudioClip failSound;
+	public AudioClip coldSnapSound;
+	public AudioClip coldSnapImpactSound;
 
 	private Transform E1Q;
 	private Transform E1W;
@@ -51,10 +52,13 @@ public class Invoker : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		// keys: Q,W,E are to create the elements by adding the associated element number the element list and 
+		// calls the method to update the visual of it. The oldest element will be removed from the element list if
+		// the list exceeds the maximum(3).
 		if(Input.GetKeyDown(KeyCode.Q))
 		{
 			elements.Add(1);
-			if(elements.Count > elementSize){
+			if(elements.Count > 3){
 				elements.RemoveAt(0);
 			}
 			updateVisuals();
@@ -62,7 +66,7 @@ public class Invoker : MonoBehaviour
 		else if (Input.GetKeyDown(KeyCode.W))
 		{
 			elements.Add(2);
-			if(elements.Count > elementSize){
+			if(elements.Count > 3){
 				elements.RemoveAt(0);
 			}
 			updateVisuals();
@@ -70,12 +74,14 @@ public class Invoker : MonoBehaviour
 		else if(Input.GetKeyDown(KeyCode.E))
 		{
 			elements.Add(3);
-			if(elements.Count > elementSize){
+			if(elements.Count > 3){
 				elements.RemoveAt(0);
 			}
 			updateVisuals();
 		}
 
+		// Keys: R will call the Invoke() method that evaluate the current elements in element list.
+		// Keys: D,F will call the spell casting method based on the order of spells in the spell list with 1 = newest and 0 = oldest
 		if(canCast)
 		{
 			if(Input.GetKeyDown(KeyCode.R))
@@ -84,15 +90,17 @@ public class Invoker : MonoBehaviour
 			}
 			else if(Input.GetKeyUp(KeyCode.D))
 			{
-				CastSpell(spells[0]);
+				castSpell(spells[1]);
 			}
 			else if(Input.GetKeyUp(KeyCode.F))
 			{
-				CastSpell(spells[1]);
+				castSpell(spells[0]);
 			}
 		}
 	}
 
+	// Evaluate current elements numbers and add the associated spell number to the spell list while tracking
+	// permutations of the element number combination. 
 	void Invoke()
 	{
 		// 1 = Quas, 2 = Wex, 3 = Exort
@@ -106,61 +114,61 @@ public class Invoker : MonoBehaviour
 			{
 				// QQQ
 				spellName = "Cold Snap";
-				spells.Add(0);
+				spells.Add(1);
 			}
 			else if((elements[0] == 1 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 1 && elements[1] == 2 && elements[2] == 1) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 1))
 			{
 				// QQW, QWQ, WQQ
 				spellName = "Ghost Walk";
-				spells.Add(1);
+				spells.Add(2);
 			}
 			else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 2 && elements[2] == 1))
 			{
 				// QWW, WQW, WWQ
 				spellName = "Tornado";
-				spells.Add(2);
+				spells.Add(3);
 			}
 			else if(elements[0] == 2 && elements[1] == 2 && elements[2] == 2)
 			{
 				// WWW
 				spellName = "EMP";
-				spells.Add(3);
+				spells.Add(4);
 			}				
 			else if((elements[0] == 2 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 2 && elements[1] == 3 && elements[2] == 2) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 2))
 			{
 				// WWE, WEW, EWW
 				spellName = "Alacrity";
-				spells.Add(4);
+				spells.Add(5);
 			}
 			else if((elements[0] == 2 && elements[1] == 3 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 3 && elements[2] == 2))
 			{
 				// WEE, EWE, EEW
 				spellName = "Chaos Meteor";
-				spells.Add(5);
+				spells.Add(6);
 			}
 			else if(elements[0] == 3 && elements[1] == 3 && elements[2] == 3)
 			{
 				// EEE
 				spellName = "Sun Strike";
-				spells.Add(6);
+				spells.Add(7);
 			}	
 			else if((elements[0] == 3 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 3 && elements[1] == 1 && elements[2] == 3) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 3))
 			{
 				// EEQ, EQE, QEE
 				spellName = "Forge Spirit";
-				spells.Add(7);
+				spells.Add(8);
 			}
 			else if((elements[0] == 3 && elements[1] == 1 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 1 && elements[2] == 3))
 			{
 				// EQQ, QEQ, QQE
 				spellName = "Ice Wall";
-				spells.Add(8);
+				spells.Add(9);
 			}
 			else
 			{
 				// QWE, QEW, WQE, WEQ, EQW, EWQ
 				spellName = "Deafening Blast";
-				spells.Add(9);
+				spells.Add(10);
 			}
 
 			if(spells.Count > spellsSize){
@@ -181,7 +189,8 @@ public class Invoker : MonoBehaviour
 			Debug.Log("Invoked: " + spellName);
 		}
 	}
-	
+
+	// Enable & Disable the element gameobjects to visually represent element ints
 	void updateVisuals()
 	{
 		/*if(elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
@@ -247,15 +256,13 @@ public class Invoker : MonoBehaviour
 		}
 	}
 
-	void CastSpell(int spellNum)
+	// Evaluate the spell number and call the method for the associated spell
+	void castSpell(int spellNum)
 	{
 		switch (spellNum)
 		{
-			case 0:
-				print ("Ulg, glib, Pblblblblb");
-				break;
 			case 1:
-				print ("Ulg, glib, Pblblblblb");
+				StartCoroutine("castColdSnap");
 				break;
 			case 2:
 				print ("Ulg, glib, Pblblblblb");
@@ -273,12 +280,15 @@ public class Invoker : MonoBehaviour
 				print ("Ulg, glib, Pblblblblb");
 				break;
 			case 7:
-				Debug.Log("Cast: Forge Spirit");
-				break;
-			case 8:
 				print ("Ulg, glib, Pblblblblb");
 				break;
+			case 8:
+				Debug.Log("Cast: ");
+				break;
 			case 9:
+				Debug.Log("Cast: Forge Spirit");
+				break;
+			case 10:
 				print ("Ulg, glib, Pblblblblb");
 				break;
 			default:
@@ -287,49 +297,30 @@ public class Invoker : MonoBehaviour
 		}
 	}
 
-	/*
-	IEnumerator castFlamethrower() 
+	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
+	// clicked, attach the Cold Snap script and associated properties.
+	IEnumerator castColdSnap()
 	{
-		GameObject temp = Instantiate(spells[0], transform.position + transform.forward, transform.rotation) as GameObject;
-		temp.transform.SetParent(transform);
-		while(Input.GetButton("Fire1")) 
+		while(!Input.GetButtonUp("Fire1"))
 		{
-			isAttacking = true;
-			anim.SetBool(CastingHash, true);
-			//_Movement.CurrentSpeed = _Movement.MaxSpeed * 0.5f;
-			//_Movement.CanRotate = false;
-			Collider[] hitColliders = Physics.OverlapSphere(transform.position + transform.forward * 2, 4);
-			foreach(Collider other in hitColliders)
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+	
+			Physics.Raycast(ray, out hit);
+			if(hit.collider.CompareTag("Enemy") && Input.GetButtonDown("Fire1"))
 			{
-				if(other.CompareTag(Tags.enemy) && other != other.GetComponent<SphereCollider>())
-				{
-					// Create a vector from the enemy to the player and store the angle between it and forward.
-					Vector3 direction = other.transform.position - transform.position;
-					float angle = Vector3.Angle(direction, transform.forward);
-					// If the angle between forward and where the player is, is less than half the angle of view...
-					if(angle < 130f * 0.5f)
-					{
-						_combatModifier.modifyDamage(Random.Range(5, 11), other.gameObject, gameObject);
-					}
-				}
+				//Vector3 newTarget = hit.point + new Vector3(0, 0.5f, 0);
+				Debug.Log("Casted: Cold Snap on " + hit.collider.name);
+				ColdSnap coldSnap = hit.collider.gameObject.AddComponent<ColdSnap>();
+				coldSnap.Duration = 5f;
+				coldSnap.ColdSnapSound = coldSnapSound;
+				coldSnap.ColdSnapImpactSound = coldSnapImpactSound;
 			}
-			yield return new WaitForSeconds(0.2f);
+			yield return null;
 		}
-		isAttacking = false;
-		anim.SetBool(CastingHash, false);
-		_Movement.CurrentSpeed = _Movement.MaxSpeed;
-		_Movement.CanRotate = true;
-		temp.GetComponent<ParticleSystem>().enableEmission = false;
-		yield return new WaitForSeconds(0.5f);
-		Destroy(temp);
 	}
 
-	void castMud()
-	{
-		GameObject temp = Instantiate(spells[1], transform.position - transform.up + transform.forward*6, Quaternion.Euler(90, 0, 0)) as GameObject;
-		temp.GetComponent<MudField>().DeathTimer = 10f;
-	}
-*/
+	// Accessors and Mutators
 	public bool CanCast
 	{
 		get { return canCast; }

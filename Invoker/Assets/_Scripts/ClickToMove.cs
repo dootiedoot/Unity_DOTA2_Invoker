@@ -6,7 +6,6 @@ public class ClickToMove : MonoBehaviour
 	public float shootDistance = 10f;
 	public float shootRate = .5f;
 
-	//private Animator anim;
 	private NavMeshAgent navMeshAgent;
 	private Transform targetedEnemy;
 	private Ray shootRay;
@@ -18,7 +17,6 @@ public class ClickToMove : MonoBehaviour
 	// Use this for initialization
 	void Awake () 
 	{
-		//anim = GetComponent<Animator> ();
 		navMeshAgent = GetComponent<NavMeshAgent> ();
 	}
 	
@@ -36,7 +34,6 @@ public class ClickToMove : MonoBehaviour
 					targetedEnemy = hit.transform;
 					enemyClicked = true;
 				}
-				
 				else
 				{
 					walking = true;
@@ -56,9 +53,7 @@ public class ClickToMove : MonoBehaviour
 				walking = false;
 		} else {
 			walking = true;
-		}
-		
-		//anim.SetBool ("IsWalking", walking);
+		}		
 	}
 	
 	private void MoveAndShoot()
