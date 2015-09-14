@@ -4,12 +4,13 @@ using System.Collections;
 public class Missile : MonoBehaviour 
 {
 	public float speed;
+	private float damage;
 	private GameObject target;
 
 	// Use this for initialization
 	void Start () 
 	{
-	
+
 	}
 	
 	// Update is called once per frame
@@ -21,16 +22,21 @@ public class Missile : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter(Collision collision) 
+	void OnTriggerEnter(Collider other) 
 	{
-		if (collision.collider.CompareTag("Enemy"))
+		if (other.CompareTag("Enemy") && other.gameObject == target)
 		{
-			Debug.Log("Hit!");
-			Destroy(gameObject, 0.2f);
+			other.GetComponent<Enemy>().TakeDamage(damage);
+			Destroy(gameObject, 0.5f);
 		}
 	}
 
 	// Accessors and Mutators
+	public float Damage
+	{
+		get { return damage; }
+		set { damage = value; }
+	}
 	public GameObject Target
 	{
 		get { return target; }

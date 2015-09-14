@@ -4,8 +4,8 @@ using System.Collections;
 public class Cast : MonoBehaviour 
 {
 	public float coldSnapDuration;
-	public float coldSnaptickCooldown;
-	public float coldSnaptickDamage;
+	public float coldSnapTickCooldown;
+	public float coldSnapTickDamage;
 
 	public int GhostWalkEnemySlow;
 	public int GhostWalkSelfSlow;
@@ -37,7 +37,7 @@ public class Cast : MonoBehaviour
 	// Public method to call the Cold Snap method
 	public void CastColdSnap()
 	{
-		StartCoroutine(ColdSnap(coldSnapDuration, coldSnaptickCooldown, coldSnaptickDamage));
+		StartCoroutine(ColdSnap(coldSnapDuration, coldSnapTickCooldown, coldSnapTickDamage));
 	}
 	public void CastGhostWalk()
 	{

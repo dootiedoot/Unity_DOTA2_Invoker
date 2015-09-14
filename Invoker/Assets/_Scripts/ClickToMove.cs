@@ -5,6 +5,7 @@ public class ClickToMove : MonoBehaviour
 {
 	public float shootDistance = 10f;
 	public float shootRate = .5f;
+	public float damage = 1;
 	public GameObject misslePrefab;
 
 	private NavMeshAgent navMeshAgent;
@@ -76,6 +77,7 @@ public class ClickToMove : MonoBehaviour
 			{
 				nextFire = Time.time + shootRate;
 				GameObject tempMissile = Instantiate(misslePrefab, transform.position + transform.up + transform.forward, Quaternion.identity) as GameObject;
+				tempMissile.GetComponent<Missile>().Damage = damage;
 				tempMissile.GetComponent<Missile>().Target = target;
 			}
 			navMeshAgent.Stop();
