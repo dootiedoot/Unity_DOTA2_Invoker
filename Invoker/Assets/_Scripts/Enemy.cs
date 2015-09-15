@@ -3,9 +3,6 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour 
 {
-	public delegate void DamageAction();
-	public static event DamageAction OnDamaged;
-	
 	public float health = 100;
 	public float maxHealth = 100;
 	public bool canMove;
@@ -22,9 +19,7 @@ public class Enemy : MonoBehaviour
 
 	public void TakeDamage(float dmg) 
 	{
-		if(OnDamaged != null)
-			OnDamaged();
-
+        BroadcastMessage("OnDamage", SendMessageOptions.DontRequireReceiver);
 		health -= dmg;
 		
 		if(health > maxHealth)

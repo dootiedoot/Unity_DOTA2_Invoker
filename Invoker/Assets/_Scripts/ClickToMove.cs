@@ -9,6 +9,7 @@ public class ClickToMove : MonoBehaviour
 	public GameObject misslePrefab;
 
 	private NavMeshAgent navMeshAgent;
+    private GameObject affecter;
 	private GameObject target;
 	private Ray shootRay;
 	private RaycastHit shootHit;
@@ -21,6 +22,11 @@ public class ClickToMove : MonoBehaviour
 	{
 		navMeshAgent = GetComponent<NavMeshAgent> ();
 	}
+
+    void Start()
+    {
+        affecter = gameObject;
+    }
 	
 	// Update is called once per frame
 	void Update () 
@@ -78,7 +84,8 @@ public class ClickToMove : MonoBehaviour
 				nextFire = Time.time + shootRate;
 				GameObject tempMissile = Instantiate(misslePrefab, transform.position + transform.up + transform.forward, Quaternion.identity) as GameObject;
 				tempMissile.GetComponent<Missile>().Damage = damage;
-				tempMissile.GetComponent<Missile>().Target = target;
+                tempMissile.GetComponent<Missile>().Affecter = affecter;
+                tempMissile.GetComponent<Missile>().Target = target;
 			}
 			navMeshAgent.Stop();
 			walking = false;

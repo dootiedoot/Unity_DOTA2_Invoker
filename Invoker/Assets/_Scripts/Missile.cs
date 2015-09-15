@@ -5,10 +5,11 @@ public class Missile : MonoBehaviour
 {
 	public float speed;
 	private float damage;
+    private GameObject affecter;
 	private GameObject target;
 
-	// Use this for initialization
-	void Start () 
+    // Use this for initialization
+    void Start () 
 	{
 
 	}
@@ -17,16 +18,16 @@ public class Missile : MonoBehaviour
 	void Update () 
 	{
 		if(target)
-		{
 			transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-		}
-	}
+        else
+            Destroy(gameObject);
+    }
 
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.CompareTag("Enemy") && other.gameObject == target)
 		{
-			other.GetComponent<Enemy>().TakeDamage(damage);
+            other.GetComponent<Enemy>().TakeDamage(damage);
 			Destroy(gameObject, 0.5f);
 		}
 	}
@@ -37,7 +38,12 @@ public class Missile : MonoBehaviour
 		get { return damage; }
 		set { damage = value; }
 	}
-	public GameObject Target
+    public GameObject Affecter
+    {
+        get { return affecter; }
+        set { affecter = value; }
+    }
+    public GameObject Target
 	{
 		get { return target; }
 		set { target = value; }
