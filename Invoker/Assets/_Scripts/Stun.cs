@@ -11,10 +11,12 @@ public class Stun : MonoBehaviour
         StartCoroutine(stun(duration));
     }
 
+    // Wait x seconds before destroying the stun script.
     IEnumerator stun(float Duration)
     {
 
         yield return new WaitForSeconds(Duration);
+        
         Destroy(this);
     }
 

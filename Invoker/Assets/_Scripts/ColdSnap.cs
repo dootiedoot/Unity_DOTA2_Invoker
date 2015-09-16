@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ColdSnap : MonoBehaviour 
 {
+    // VARIABLES
+    // Private
 	private float duration = 1;
 	private float tickCooldown;
 	[SerializeField] private float currentTickCooldown = 0;
@@ -21,6 +23,7 @@ public class ColdSnap : MonoBehaviour
 
 	void Awake () 
 	{
+        // Assign references
 		_enemy = GetComponent<Enemy>();
         rend = GetComponent<Renderer>();
         audioSource = GetComponent<AudioSource>();
@@ -29,16 +32,20 @@ public class ColdSnap : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+        // Variable assignments
 		currentTickCooldown = TickCooldown;
         materialColorHolder = rend.material.color;
         coldSnapColor = Color.blue;
         audioSource.PlayOneShot(coldSnapSound, 1);
+
+        // Start IEnumerator to destory object after x seconds.
         StartCoroutine(destroy(6));
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+        // if the cooldown is not 0 or less, countdown cooldown and adjust material to original.
 		if(currentTickCooldown > 0)
 		{
 			currentTickCooldown -= Time.deltaTime;
@@ -47,18 +54,21 @@ public class ColdSnap : MonoBehaviour
 		}
 	}
 
+    // When damaged, check cooldown for the next snap; If snappable, reset cooldown, do damage, adjust visuals/audio.
 	void OnDamage()
 	{
 		if(currentTickCooldown <= 0)
 		{
-            //_enemy.TakeDamage(tickDamage);
-            rend.material.color = coldSnapColor;
 			currentTickCooldown = TickCooldown;
+            _enemy.TakeDamage(tickDamage);
+
+            rend.material.color = coldSnapColor;
 			audioSource.PlayOneShot(coldSnapImpactSound, 1);
-			Debug.Log("Snapped!");
+			//Debug.Log("Snapped!");
 		}
 	}
 
+    // Stop Cold Snap after duration is up and return material back to original.
     IEnumerator destroy(float Duration)
     {
         yield return new WaitForSeconds(Duration);
