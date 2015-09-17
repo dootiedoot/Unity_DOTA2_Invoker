@@ -63,7 +63,7 @@ public class Cast : MonoBehaviour
 				coldSnap.TickDamage = tickDamage;
 				coldSnap.ColdSnapSound = coldSnapSound;
 				coldSnap.ColdSnapImpactSound = coldSnapImpactSound;
-			}
+            }
 			yield return null;
 		}
 	}

@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: 3ea87702f1d764441a9c8723acf44bd5
-timeCreated: 1441312521
+timeCreated: 1442522996
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - misslePrefab: {fileID: 127020, guid: 352b2b82d68db014a889bd077936d943, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

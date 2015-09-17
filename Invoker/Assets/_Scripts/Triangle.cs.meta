@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: cd25b6648e9419f42914a08ad2c20819
-timeCreated: 1441297895
+timeCreated: 1442522982
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Quas: {fileID: 155628, guid: b4325053fed306f449bf0c952e57eae1, type: 2}
+  - Wex: {fileID: 109178, guid: 536fde9f45fae9a4fbfb5ed4ae154f37, type: 2}
+  - Exort: {fileID: 160048, guid: 4c1890baac428c3448ddbc1fd1564136, type: 2}
+  - centerPrefab: {fileID: 195098, guid: f0c82b49e83c939489f10b82cc06a8a6, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

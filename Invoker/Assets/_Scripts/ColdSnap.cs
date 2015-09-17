@@ -7,7 +7,7 @@ public class ColdSnap : MonoBehaviour
     // Private
 	private float duration = 1;
 	private float tickCooldown;
-	[SerializeField] private float currentTickCooldown = 0;
+	private float currentTickCooldown = 0;
 	private float tickDamage;
 
 	private Enemy _enemy;
@@ -24,20 +24,25 @@ public class ColdSnap : MonoBehaviour
 	void Awake () 
 	{
         // Assign references
-		_enemy = GetComponent<Enemy>();
+        _enemy = GetComponent<Enemy>();
+        Stun _stun = gameObject.AddComponent<Stun>();
+        _stun.Duration = 0.4f;
         rend = GetComponent<Renderer>();
         audioSource = GetComponent<AudioSource>();
-	}
+    }
 
 	// Use this for initialization
 	void Start () 
 	{
-        // Variable assignments
-		currentTickCooldown = TickCooldown;
-        materialColorHolder = rend.material.color;
-        coldSnapColor = Color.blue;
-        audioSource.PlayOneShot(coldSnapSound, 1);
+        // Assignments
+        currentTickCooldown = TickCooldown;
 
+        coldSnapColor = Color.blue;
+        materialColorHolder = rend.material.color;
+        rend.material.color = coldSnapColor;
+
+        audioSource.PlayOneShot(coldSnapSound, 1);
+        
         // Start IEnumerator to destory object after x seconds.
         StartCoroutine(destroy(6));
 	}
@@ -49,7 +54,7 @@ public class ColdSnap : MonoBehaviour
 		if(currentTickCooldown > 0)
 		{
 			currentTickCooldown -= Time.deltaTime;
-            if (rend.material.color != materialColorHolder && currentTickCooldown <= 0.30f)
+            if (rend.material.color != materialColorHolder && currentTickCooldown <= 0.4f)
                 rend.material.color = materialColorHolder;
 		}
 	}
@@ -59,12 +64,14 @@ public class ColdSnap : MonoBehaviour
 	{
 		if(currentTickCooldown <= 0)
 		{
-			currentTickCooldown = TickCooldown;
+            Stun stun = gameObject.AddComponent<Stun>();
+            stun.Duration = 0.4f;
+            currentTickCooldown = TickCooldown;
             _enemy.TakeDamage(tickDamage);
 
             rend.material.color = coldSnapColor;
 			audioSource.PlayOneShot(coldSnapImpactSound, 1);
-			//Debug.Log("Snapped!");
+			Debug.Log("Snapped!");
 		}
 	}
 

@@ -3,21 +3,31 @@ using System.Collections;
 
 public class Stun : MonoBehaviour
 {
-    private float duration;
+    private float duration = 0;
+    private NavMeshAgent navMeshAgent;
 
-	// Use this for initialization
-	void Start ()
+    private void Awake()
     {
-        StartCoroutine(stun(duration));
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
-    // Wait x seconds before destroying the stun script.
-    IEnumerator stun(float Duration)
+    void Start ()
     {
-
-        yield return new WaitForSeconds(Duration);
-        
-        Destroy(this);
+        navMeshAgent.Stop();
+    }
+    
+    void Update()
+    {
+        // Wait x seconds before destroying the stun script.
+        if (duration > 0)
+        {
+            duration -= Time.deltaTime;
+        }
+        else
+        {
+            navMeshAgent.Resume();
+            Destroy(this);
+        }
     }
 
     // Accessors and Mutators
