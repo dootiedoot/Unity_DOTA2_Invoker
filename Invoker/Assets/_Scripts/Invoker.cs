@@ -263,8 +263,8 @@ public class Invoker : MonoBehaviour
 				_cast.CastColdSnap();
 				break;
 			case 2:
-				print ("Ulg, glib, Pblblblblb");
-				break;
+                _cast.CastGhostWalk();
+                break;
 			case 3:
 				print ("Ulg, glib, Pblblblblb");
 				break;

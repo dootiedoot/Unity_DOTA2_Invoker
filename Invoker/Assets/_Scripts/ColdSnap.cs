@@ -84,8 +84,8 @@ public class ColdSnap : MonoBehaviour
         Destroy(this);
     }
 
-// Accessors and Mutators
-public float Duration
+    // Accessors and Mutators
+    public float Duration
 	{
 		get { return duration; }
 		set { duration = value; }

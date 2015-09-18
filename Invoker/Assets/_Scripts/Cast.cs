@@ -7,8 +7,8 @@ public class Cast : MonoBehaviour
 	public float coldSnapTickCooldown;
 	public float coldSnapTickDamage;
 
-	public int GhostWalkEnemySlow;
-	public int GhostWalkSelfSlow;
+	public float GhostWalkEnemySlow;
+	public float GhostWalkSelfSlow;
 
 	public AudioClip coldSnapSound;
 	public AudioClip coldSnapImpactSound;
@@ -70,9 +70,12 @@ public class Cast : MonoBehaviour
 
 	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
 	// clicked, attach the Cold Snap script and associated properties.
-	IEnumerator GhostWalk(int enemySlow, int selfSlow)
+	IEnumerator GhostWalk(float enemySlow, float selfSlow)
 	{
-		bool GhostWalk = true;
+        GhostWalk ghostWalk = gameObject.AddComponent<GhostWalk>();
+        ghostWalk.SelfSlow = selfSlow;
+        ghostWalk.EnemySlow = enemySlow;
+        bool GhostWalk = true;
 		while(GhostWalk)
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

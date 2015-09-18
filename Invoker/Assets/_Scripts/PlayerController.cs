@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ClickToMove : MonoBehaviour 
+public class PlayerController : MonoBehaviour 
 {
 	public float shootDistance = 10f;
 	public float shootRate = .5f;
 	public float damage = 1;
 	public GameObject misslePrefab;
+    public GameObject selectionMarker;
+    private Renderer selectionMarkerRend;
 
 	private NavMeshAgent navMeshAgent;
     private GameObject affecter;
@@ -20,6 +22,7 @@ public class ClickToMove : MonoBehaviour
 	// Use this for initialization
 	void Awake () 
 	{
+        selectionMarkerRend = selectionMarker.GetComponent<Renderer>();
 		navMeshAgent = GetComponent<NavMeshAgent> ();
 	}
 
@@ -27,17 +30,34 @@ public class ClickToMove : MonoBehaviour
     {
         affecter = gameObject;
     }
-	
-	// Update is called once per frame
-	void Update () 
+
+    // Update is called once per frame
+    void Update () 
 	{
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
-		if (Input.GetButtonDown ("Fire2")) 
+
+		if (Physics.Raycast(ray, out hit, 100))
 		{
-			if (Physics.Raycast(ray, out hit, 100))
-			{
-				if (hit.collider.CompareTag("Enemy"))
+            selectionMarker.transform.position = hit.point;
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                selectionMarker.transform.position = hit.transform.position + transform.up * 2;
+                selectionMarkerRend.material.SetColor("_Color", Color.red);
+            }
+            else if (hit.collider.CompareTag("Ally"))
+            {
+                selectionMarker.transform.position = hit.transform.position + transform.up * 2;
+                selectionMarkerRend.material.SetColor("_Color", Color.green);
+            }
+            else
+            {
+                selectionMarkerRend.material.SetColor("_Color", Color.black);
+            }
+
+            if (Input.GetButtonDown("Fire2"))
+            {
+                if (hit.collider.CompareTag("Enemy"))
 				{
 					target = hit.collider.gameObject;
 					enemyClicked = true;
