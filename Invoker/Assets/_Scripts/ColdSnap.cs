@@ -71,7 +71,7 @@ public class ColdSnap : MonoBehaviour
 
             rend.material.color = coldSnapColor;
 			audioSource.PlayOneShot(coldSnapImpactSound, 1);
-			Debug.Log("Snapped!");
+			print("Snapped!");
 		}
 	}
 

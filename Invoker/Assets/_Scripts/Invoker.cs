@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
 public class Invoker : MonoBehaviour 
 {
 	public bool canCast = true;
-	public bool isAttacking;
 	public List<int> elements;
-	public int spellsSize = 2;
 	public List<int> spells;
 
-	public AudioClip invokeSound;
+    public Button button;
+
+    public AudioClip invokeSound;
 	public AudioClip failSound;
 	
 	private Transform E1Q;
@@ -49,60 +51,58 @@ public class Invoker : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		// keys: Q,W,E are to create the elements by adding the associated element number the element list and 
-		// calls the method to update the visual of it. The oldest element will be removed from the element list if
-		// the list exceeds the maximum(3).
-		if(Input.GetKeyDown(KeyCode.Q))
-		{
-			elements.Add(1);
-			if(elements.Count > 3){
-				elements.RemoveAt(0);
-			}
-			updateVisuals();
-		}
-		else if (Input.GetKeyDown(KeyCode.W))
-		{
-			elements.Add(2);
-			if(elements.Count > 3){
-				elements.RemoveAt(0);
-			}
-			updateVisuals();
-		}
-		else if(Input.GetKeyDown(KeyCode.E))
-		{
-			elements.Add(3);
-			if(elements.Count > 3){
-				elements.RemoveAt(0);
-			}
-			updateVisuals();
-		}
+        // keys: Q,W,E are to create the elements by adding the associated element number the element list and 
+        // calls the method to update the visual of it. The oldest element will be removed from the element list if
+        // the list exceeds the maximum(3).
+        if (Input.GetKeyDown(KeyCode.Q))
+            castQuas();
+        else if (Input.GetKeyDown(KeyCode.W))
+            castWex();
+        else if (Input.GetKeyDown(KeyCode.E))
+            castExort();
 
 		// Keys: R will call the Invoke() method that evaluate the current elements in element list.
 		// Keys: D,F will call the spell casting method based on the order of spells in the spell list with 1 = newest and 0 = oldest
 		if(canCast)
 		{
 			if(Input.GetKeyDown(KeyCode.R))
-			{
 				Invoke();
-			}
 			else if(Input.GetKeyUp(KeyCode.D))
-			{
 				castSpell(spells[1]);
-			}
 			else if(Input.GetKeyUp(KeyCode.F))
-			{
 				castSpell(spells[0]);
-			}
 		}
 	}
 
-	// Evaluate current elements numbers and add the associated spell number to the spell list while tracking
-	// permutations of the element number combination. 
-	void Invoke()
+    public void castQuas()
+    {
+        elements.Add(1);
+        if (elements.Count > 3)
+            elements.RemoveAt(0);
+        updateVisuals();
+    }
+    public void castWex()
+    {
+        elements.Add(2);
+        if (elements.Count > 3)
+            elements.RemoveAt(0);
+        updateVisuals();
+    }
+    public void castExort()
+    {
+        elements.Add(3);
+        if (elements.Count > 3)
+            elements.RemoveAt(0);
+        updateVisuals();
+    }
+
+    // Evaluate current elements numbers and add the associated spell number to the spell list while tracking
+    // permutations of the element number combination. 
+    public void Invoke()
 	{
 		// 1 = Quas, 2 = Wex, 3 = Exort
 		if(elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
-			Debug.Log("Nothing to invoke");
+			print("Nothing to invoke");
 			audioSource.PlayOneShot(failSound, 1);
 		}
 		else
@@ -169,7 +169,7 @@ public class Invoker : MonoBehaviour
 				spells.Add(10);
 			}
 
-			if(spells.Count > spellsSize){
+			if(spells.Count > 2){
 				spells.RemoveAt(0);
 			}
 			// Incase there are more then 3 elements and Permutation is needed. Use Else instead to save code.
@@ -184,7 +184,7 @@ public class Invoker : MonoBehaviour
 					spellName = "Deafening Blast";
 					}*/
 			audioSource.PlayOneShot(invokeSound, 1);
-			Debug.Log("Invoked: " + spellName);
+			print("Invoked: " + spellName);
 		}
 	}
 
@@ -281,10 +281,10 @@ public class Invoker : MonoBehaviour
 				print ("Ulg, glib, Pblblblblb");
 				break;
 			case 8:
-				Debug.Log("Cast: ");
+				print("Cast: ");
 				break;
 			case 9:
-				Debug.Log("Cast: Forge Spirit");
+				print("Cast: Forge Spirit");
 				break;
 			case 10:
 				print ("Ulg, glib, Pblblblblb");

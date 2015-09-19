@@ -7,6 +7,7 @@ public class Cast : MonoBehaviour
 	public float coldSnapTickCooldown;
 	public float coldSnapTickDamage;
 
+    public float GhostWalkDuration;
 	public float GhostWalkEnemySlow;
 	public float GhostWalkSelfSlow;
 
@@ -41,7 +42,7 @@ public class Cast : MonoBehaviour
 	}
 	public void CastGhostWalk()
 	{
-		StartCoroutine(GhostWalk(GhostWalkEnemySlow, GhostWalkSelfSlow));
+		StartCoroutine(GhostWalk(GhostWalkDuration, GhostWalkEnemySlow, GhostWalkSelfSlow));
 	}
 
 	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
@@ -56,7 +57,7 @@ public class Cast : MonoBehaviour
 			Physics.Raycast(ray, out hit);
 			if(hit.collider.CompareTag("Enemy") && Input.GetButtonDown("Fire1"))
 			{
-				Debug.Log("Casted: Cold Snap on " + hit.collider.name);
+				print("Casted: Cold Snap on " + hit.collider.name);
 				ColdSnap coldSnap = hit.collider.gameObject.AddComponent<ColdSnap>();
 				coldSnap.Duration = duration;
 				coldSnap.TickCooldown = tickCooldown;
@@ -70,9 +71,10 @@ public class Cast : MonoBehaviour
 
 	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
 	// clicked, attach the Cold Snap script and associated properties.
-	IEnumerator GhostWalk(float enemySlow, float selfSlow)
+	IEnumerator GhostWalk(float duration, float enemySlow, float selfSlow)
 	{
         GhostWalk ghostWalk = gameObject.AddComponent<GhostWalk>();
+        ghostWalk.Duration = duration;
         ghostWalk.SelfSlow = selfSlow;
         ghostWalk.EnemySlow = enemySlow;
         bool GhostWalk = true;

@@ -4,10 +4,9 @@ using System.Collections;
 public class GhostWalk : MonoBehaviour
 {
     // VARAIBLES
+    private float duration;
     private float selfSlowMultiplier;
     private float enemySlowMultiplier;
-
-    private float duration = 
 
 	// Use this for initialization
 	void Start ()
@@ -22,6 +21,11 @@ public class GhostWalk : MonoBehaviour
 	}
 
     // Accessors and Mutators
+    public float Duration
+    {
+        get { return duration; }
+        set { duration = value; }
+    }
     public float SelfSlow
     {
         get { return selfSlowMultiplier; }

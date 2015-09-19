@@ -111,5 +111,4 @@ public class PlayerController : MonoBehaviour
 			walking = false;
 		}
 	}
-	
 }
