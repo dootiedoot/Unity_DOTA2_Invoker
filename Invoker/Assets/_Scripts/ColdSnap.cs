@@ -37,14 +37,16 @@ public class ColdSnap : MonoBehaviour
         // Assignments
         currentTickCooldown = TickCooldown;
 
-        coldSnapColor = Color.blue;
-        materialColorHolder = rend.material.color;
-        rend.material.color = coldSnapColor;
-
+		// 1st Tick color change
+		materialColorHolder = rend.sharedMaterial.color;
+		coldSnapColor = Color.blue;
+		SetColor(rend.sharedMaterial, coldSnapColor);
+		
+		// 1st tick audio
         audioSource.PlayOneShot(coldSnapSound, 1);
         
         // Start IEnumerator to destory object after x seconds.
-        StartCoroutine(destroy(6));
+        StartCoroutine(destroy(duration));
 	}
 	
 	// Update is called once per frame
@@ -54,8 +56,8 @@ public class ColdSnap : MonoBehaviour
 		if(currentTickCooldown > 0)
 		{
 			currentTickCooldown -= Time.deltaTime;
-            if (rend.material.color != materialColorHolder && currentTickCooldown <= 0.4f)
-                rend.material.color = materialColorHolder;
+            if (currentTickCooldown <= 0.4f)
+				SetColor(rend.sharedMaterial, materialColorHolder);
 		}
 	}
 
@@ -69,18 +71,25 @@ public class ColdSnap : MonoBehaviour
             currentTickCooldown = TickCooldown;
             _enemy.TakeDamage(tickDamage);
 
-            rend.material.color = coldSnapColor;
+            rend.sharedMaterial.color = coldSnapColor;
 			audioSource.PlayOneShot(coldSnapImpactSound, 1);
 			print("Snapped!");
 		}
+	}
+
+	public void SetColor(Material material, Color value) 
+	{
+		Color color = material.color;
+		color = value;
+		material.color = color;
 	}
 
     // Stop Cold Snap after duration is up and return material back to original.
     IEnumerator destroy(float Duration)
     {
         yield return new WaitForSeconds(Duration);
-        if (rend.material.color != materialColorHolder)
-            rend.material.color = materialColorHolder;
+		if (rend.sharedMaterial.color != materialColorHolder)
+			SetColor(rend.sharedMaterial, materialColorHolder);
         Destroy(this);
     }
 

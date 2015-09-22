@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: d7347f656b462764e8b130e27d98a895
-timeCreated: 1441839816
+timeCreated: 1442944716
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - coldSnapSound: {fileID: 8300000, guid: bd0c4bc320321c7478bea36f4342622d, type: 3}
+  - coldSnapImpactSound: {fileID: 8300000, guid: 01abc83dc1f73a4408ee7ead3456fb38,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

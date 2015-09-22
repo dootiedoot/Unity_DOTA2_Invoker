@@ -1,11 +1,10 @@
 fileFormatVersion: 2
-guid: 278ceb3a6f6180246ae332d3d1b7a5b8
-timeCreated: 1442945988
+guid: d6f0564ef16cc5147887baeec35f5601
+timeCreated: 1442952928
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences:
-  - ghostWalkSound: {fileID: 8300000, guid: d95658dd14fd4dc4588a01566e2736b3, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

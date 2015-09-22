@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Cast : MonoBehaviour 
 {
+	// VARIABLES
+	// spell attributes
 	public float coldSnapDuration;
 	public float coldSnapTickCooldown;
 	public float coldSnapTickDamage;
@@ -11,29 +13,8 @@ public class Cast : MonoBehaviour
 	public float GhostWalkEnemySlow;
 	public float GhostWalkSelfSlow;
 
-	public AudioClip coldSnapSound;
-	public AudioClip coldSnapImpactSound;
-	public AudioClip ghostWalkSound;
-	public AudioClip iceWallSound;
-	public AudioClip empSound;
-	public AudioClip tornadoSound;
-	public AudioClip alacritySound;
-	public AudioClip sunStrikeSound;
-	public AudioClip forgeSpiritSound;
-	public AudioClip chaosMeteorSound;
-	public AudioClip defeaningBlastSound;
-
-	// Use this for initialization
-	void Start () 
-	{
-	
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-	
-	}
+	// Audio
+	public AudioClip[] spellSoundClips;
 
 	// Public method to call the Cold Snap method
 	public void CastColdSnap()
@@ -62,8 +43,8 @@ public class Cast : MonoBehaviour
 				coldSnap.Duration = duration;
 				coldSnap.TickCooldown = tickCooldown;
 				coldSnap.TickDamage = tickDamage;
-				coldSnap.ColdSnapSound = coldSnapSound;
-				coldSnap.ColdSnapImpactSound = coldSnapImpactSound;
+				coldSnap.ColdSnapSound = spellSoundClips[0];
+				coldSnap.ColdSnapImpactSound = spellSoundClips[1];
             }
 			yield return null;
 		}
@@ -73,10 +54,13 @@ public class Cast : MonoBehaviour
 	// clicked, attach the Cold Snap script and associated properties.
 	IEnumerator GhostWalk(float duration, float enemySlow, float selfSlow)
 	{
+		print("Casted: Ghost Walk");
         GhostWalk ghostWalk = gameObject.AddComponent<GhostWalk>();
         ghostWalk.Duration = duration;
         ghostWalk.SelfSlow = selfSlow;
         ghostWalk.EnemySlow = enemySlow;
+		ghostWalk.GhostWalkSound = spellSoundClips[2];
+
         bool GhostWalk = true;
 		while(GhostWalk)
 		{
@@ -87,10 +71,6 @@ public class Cast : MonoBehaviour
 				if (hit.collider.CompareTag("Enemy"))
 				{
 					GhostWalk = false;
-				}
-				else
-				{
-
 				}
 			}
 			yield return null;

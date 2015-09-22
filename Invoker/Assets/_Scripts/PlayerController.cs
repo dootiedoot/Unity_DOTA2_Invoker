@@ -33,8 +33,16 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update () 
+	void Update()
 	{
+		// Stop actions if the "Stop" command is pressed
+		if(Input.GetButtonDown("Stop"))
+		{
+			navMeshAgent.Stop();
+			walking = false;
+			target = null;
+		}
+
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 
