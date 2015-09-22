@@ -9,8 +9,10 @@ public class Invoker : MonoBehaviour
 	public bool canCast = true;
 	public List<int> elements;
 	public List<int> spells;
+    public Sprite[] spellIcons;
 
-    public Button button;
+    public Button buttonD;
+    public Button buttonF;
 
     public AudioClip invokeSound;
 	public AudioClip failSound;
@@ -107,69 +109,88 @@ public class Invoker : MonoBehaviour
 		}
 		else
 		{
-			string spellName;
+            string spellName;
 			if(elements[0] == 1 && elements[1] == 1 && elements[2] == 1)
 			{
 				// QQQ
 				spellName = "Cold Snap";
-				spells.Add(1);
-			}
+                if(spells[1] != 1)
+				    spells.Add(1);
+            }
 			else if((elements[0] == 1 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 1 && elements[1] == 2 && elements[2] == 1) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 1))
 			{
 				// QQW, QWQ, WQQ
 				spellName = "Ghost Walk";
-				spells.Add(2);
-			}
+                if (spells[1] != 2)
+                    spells.Add(2);
+                buttonD.image.sprite = spellIcons[1];
+            }
 			else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 2 && elements[1] == 2 && elements[2] == 1))
 			{
 				// QWW, WQW, WWQ
 				spellName = "Tornado";
-				spells.Add(3);
-			}
+                if (spells[1] != 3)
+                    spells.Add(3);
+                buttonD.image.sprite = spellIcons[2];
+            }
 			else if(elements[0] == 2 && elements[1] == 2 && elements[2] == 2)
 			{
 				// WWW
 				spellName = "EMP";
-				spells.Add(4);
-			}				
+                if (spells[1] != 4)
+                    spells.Add(4);
+                buttonD.image.sprite = spellIcons[3];
+            }				
 			else if((elements[0] == 2 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 2 && elements[1] == 3 && elements[2] == 2) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 2))
 			{
 				// WWE, WEW, EWW
 				spellName = "Alacrity";
-				spells.Add(5);
-			}
+                if (spells[1] != 5)
+                    spells.Add(5);
+                buttonD.image.sprite = spellIcons[4];
+            }
 			else if((elements[0] == 2 && elements[1] == 3 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 2 && elements[2] == 3) || (elements[0] == 3 && elements[1] == 3 && elements[2] == 2))
 			{
 				// WEE, EWE, EEW
 				spellName = "Chaos Meteor";
-				spells.Add(6);
-			}
+                if (spells[1] != 6)
+                    spells.Add(6);
+                buttonD.image.sprite = spellIcons[5];
+            }
 			else if(elements[0] == 3 && elements[1] == 3 && elements[2] == 3)
 			{
 				// EEE
 				spellName = "Sun Strike";
-				spells.Add(7);
-			}	
+                if (spells[1] != 8)
+                    spells.Add(7);
+                buttonD.image.sprite = spellIcons[6];
+            }	
 			else if((elements[0] == 3 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 3 && elements[1] == 1 && elements[2] == 3) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 3))
 			{
 				// EEQ, EQE, QEE
 				spellName = "Forge Spirit";
-				spells.Add(8);
-			}
+                if (spells[1] != 8)
+                    spells.Add(8);
+                buttonD.image.sprite = spellIcons[7];
+            }
 			else if((elements[0] == 3 && elements[1] == 1 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 3 && elements[2] == 1) || (elements[0] == 1 && elements[1] == 1 && elements[2] == 3))
 			{
 				// EQQ, QEQ, QQE
 				spellName = "Ice Wall";
-				spells.Add(9);
-			}
+                if (spells[1] != 9)
+                    spells.Add(9);
+                buttonD.image.sprite = spellIcons[8];
+            }
 			else
 			{
 				// QWE, QEW, WQE, WEQ, EQW, EWQ
 				spellName = "Deafening Blast";
-				spells.Add(10);
-			}
+                if (spells[1] != 10)
+                    spells.Add(10);
+                buttonD.image.sprite = spellIcons[9];
+            }
 
-			if(spells.Count > 2){
+            if (spells.Count > 2){
 				spells.RemoveAt(0);
 			}
 			// Incase there are more then 3 elements and Permutation is needed. Use Else instead to save code.
@@ -183,6 +204,7 @@ public class Invoker : MonoBehaviour
 					// QWE, QEW, WQE, WEQ, EQW, EWQ
 					spellName = "Deafening Blast";
 					}*/
+
 			audioSource.PlayOneShot(invokeSound, 1);
 			print("Invoked: " + spellName);
 		}

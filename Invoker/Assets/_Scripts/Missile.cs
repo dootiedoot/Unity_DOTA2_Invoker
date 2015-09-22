@@ -11,7 +11,21 @@ public class Missile : MonoBehaviour
 	private float damage;
     private GameObject affecter;
 	private GameObject target;
+
+    // Audio
+    public AudioClip missleLaunchSound;
+    public AudioClip missleImpactSound;
+    private AudioSource audioSource;
 	
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    void Start()
+    {
+        audioSource.PlayOneShot(missleLaunchSound, .75f);
+    }
 	// Update is called once per frame
 	void Update () 
 	{
@@ -30,7 +44,9 @@ public class Missile : MonoBehaviour
             //other.SendMessage("TakeDamage", damage); // Attemp to call TakeDamage() anywhere.
             other.GetComponent<Enemy>().TakeDamage(damage);
 			Destroy(gameObject, 0.5f);
-		}
+
+            audioSource.PlayOneShot(missleImpactSound, .5f);
+        }
 	}
 
 	// Accessors and Mutators

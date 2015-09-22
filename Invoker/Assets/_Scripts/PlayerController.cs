@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 	public float shootRate = .5f;
 	public float damage = 1;
 	public GameObject misslePrefab;
+    public GameObject locationMarker;
     public GameObject selectionMarker;
     private Renderer selectionMarkerRend;
 
@@ -42,17 +43,19 @@ public class PlayerController : MonoBehaviour
             selectionMarker.transform.position = hit.point;
             if (hit.collider.CompareTag("Enemy"))
             {
+                selectionMarker.SetActive(true);
                 selectionMarker.transform.position = hit.transform.position + transform.up * 2;
                 selectionMarkerRend.material.SetColor("_Color", Color.red);
             }
             else if (hit.collider.CompareTag("Ally"))
             {
+                selectionMarker.SetActive(true);
                 selectionMarker.transform.position = hit.transform.position + transform.up * 2;
                 selectionMarkerRend.material.SetColor("_Color", Color.green);
             }
             else
             {
-                selectionMarkerRend.material.SetColor("_Color", Color.black);
+                selectionMarker.SetActive(false);
             }
 
             if (Input.GetButtonDown("Fire2"))
@@ -68,7 +71,8 @@ public class PlayerController : MonoBehaviour
 					enemyClicked = false;
 					navMeshAgent.destination = hit.point;
 					navMeshAgent.Resume();
-				}
+                    Destroy(Instantiate(locationMarker, hit.point, Quaternion.identity), .5f);
+                }
 			}
 		}
 		
