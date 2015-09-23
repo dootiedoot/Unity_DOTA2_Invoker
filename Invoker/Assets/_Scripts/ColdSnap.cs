@@ -88,8 +88,13 @@ public class ColdSnap : MonoBehaviour
     IEnumerator destroy(float Duration)
     {
         yield return new WaitForSeconds(Duration);
-		if (rend.sharedMaterial.color != materialColorHolder)
-			SetColor(rend.sharedMaterial, materialColorHolder);
+        Die();
+    }
+
+    public void Die()
+    {
+        if (rend.sharedMaterial.color != materialColorHolder)
+            SetColor(rend.sharedMaterial, materialColorHolder);
         Destroy(this);
     }
 

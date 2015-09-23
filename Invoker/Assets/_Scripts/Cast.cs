@@ -13,17 +13,30 @@ public class Cast : MonoBehaviour
 	public float GhostWalkEnemySlow;
 	public float GhostWalkSelfSlow;
 
+    // Scripts
+    private PlayerController _playerController;
+
 	// Audio
 	public AudioClip[] spellSoundClips;
 
+    void Awake()
+    {
+        _playerController = GetComponent<PlayerController>();
+    }
+
 	// Public method to call the Cold Snap method
 	public void CastColdSnap()
-	{
-		StartCoroutine(ColdSnap(coldSnapDuration, coldSnapTickCooldown, coldSnapTickDamage));
+    {
+        if (GetComponent<ColdSnap>())
+            GetComponent<ColdSnap>().Die();
+        StartCoroutine(ColdSnap(coldSnapDuration, coldSnapTickCooldown, coldSnapTickDamage));
 	}
 	public void CastGhostWalk()
-	{
-		StartCoroutine(GhostWalk(GhostWalkDuration, GhostWalkEnemySlow, GhostWalkSelfSlow));
+    {
+        _playerController.Target = null;
+        if (GetComponent<GhostWalk>())
+            GetComponent<GhostWalk>().Die();
+        StartCoroutine(GhostWalk(GhostWalkDuration, GhostWalkEnemySlow, GhostWalkSelfSlow));
 	}
 
 	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
@@ -50,8 +63,7 @@ public class Cast : MonoBehaviour
 		}
 	}
 
-	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
-	// clicked, attach the Cold Snap script and associated properties.
+    // Ghost Walk
 	IEnumerator GhostWalk(float duration, float enemySlow, float selfSlow)
 	{
 		print("Casted: Ghost Walk");
@@ -64,14 +76,10 @@ public class Cast : MonoBehaviour
         bool GhostWalk = true;
 		while(GhostWalk)
 		{
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if (Input.GetButtonDown ("Fire2") && Physics.Raycast(ray, out hit, 100)) 
+			if (_playerController.Target != null) 
 			{
-				if (hit.collider.CompareTag("Enemy"))
-				{
-					GhostWalk = false;
-				}
+                ghostWalk.Die();
+				GhostWalk = false;
 			}
 			yield return null;
 		}

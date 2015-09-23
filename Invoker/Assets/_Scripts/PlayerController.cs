@@ -123,4 +123,11 @@ public class PlayerController : MonoBehaviour
 			walking = false;
 		}
 	}
+
+    // Accessors and Mutators
+    public GameObject Target
+    {
+        get { return target; }
+        set { target = value; }
+    }
 }

@@ -9,10 +9,13 @@ public class GhostWalk : MonoBehaviour
     private float selfSlowMultiplier;
     private float enemySlowMultiplier;
 
-	private Locomotion _locomotion;
+    // Scripts
+    private NavMeshAgent navMeshAgent;
+    private SphereCollider sphereCol;
 
-	// Visuals
-	private Material myMaterial;
+    // Visuals
+    private Material myMaterial;
+    private Color enemyColor;
 
 	// Audio
 	private AudioClip ghostWalkSound;
@@ -21,15 +24,22 @@ public class GhostWalk : MonoBehaviour
 	// Assign references
 	void Awake () 
 	{
-		_locomotion = GetComponent<Locomotion>();
-		audioSource = GetComponent<AudioSource>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        sphereCol = gameObject.AddComponent<SphereCollider>();
+        audioSource = GetComponent<AudioSource>();
 		myMaterial = GetComponent<Renderer>().sharedMaterial;
 	}
 
 	// Use this for initialization
 	void Start ()
     {
-		_locomotion.adjustSpeed(-selfSlowMultiplier);
+
+        // Adjust movement speed of gameobject
+        navMeshAgent.speed *= (1 + selfSlowMultiplier);
+
+        // Sphere Collider attributes
+        sphereCol.radius = 4.0f;
+        sphereCol.isTrigger = true;
 
 		// Play audio
 		audioSource.PlayOneShot(ghostWalkSound, 1);
@@ -40,8 +50,35 @@ public class GhostWalk : MonoBehaviour
 		StartCoroutine(destroy(duration));
 	}
 
-	// Changes rendering mode and alpha of the given material
-	public void SetInvisibleMaterial(Material material, float value, int mode) 
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            print("Entered: " + other.name);
+            other.GetComponent<NavMeshAgent>().speed *= (1 + enemySlowMultiplier);
+            enemyColor = other.GetComponent<Renderer>().sharedMaterial.color;
+            SetColor(other.GetComponent<Renderer>().sharedMaterial, Color.blue);
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            other.GetComponent<NavMeshAgent>().speed /= (1 + enemySlowMultiplier);
+            SetColor(other.GetComponent<Renderer>().sharedMaterial, enemyColor);
+        }
+    }
+
+    public void SetColor(Material material, Color value)
+    {
+        Color color = material.color;
+        color = value;
+        material.color = color;
+    }
+
+    // Changes rendering mode and alpha of the given material
+    public void SetInvisibleMaterial(Material material, float value, int mode) 
 	{
 		Color color = material.color;
 		color.a = value;
@@ -61,12 +98,17 @@ public class GhostWalk : MonoBehaviour
 	{
 		yield return new WaitForSeconds(Duration);
 
-		_locomotion.adjustSpeed(100*-selfSlowMultiplier);
-
-		SetInvisibleMaterial(myMaterial, 1, 0);
-
-		Destroy(this);
+        Die();
 	}
+
+    // Destory object and return attributes to original state
+    public void Die()
+    {
+        navMeshAgent.speed /= (1 + selfSlowMultiplier);
+        Destroy(GetComponent<SphereCollider>());
+        SetInvisibleMaterial(myMaterial, 1, 0);
+        Destroy(this);
+    }
 
     // Accessors and Mutators
     public float Duration
