@@ -12,12 +12,13 @@ public class ColdSnap : MonoBehaviour
 
 	private Enemy _enemy;
 
-    private Renderer rend;
-    private Color materialColorHolder;
-    private Color coldSnapColor;
+    // Visuals
+    private Renderer render;
+    private Material snapMaterial;
+    private Material originalMaterial;
 
+    // Audio
     private AudioSource audioSource;
-
 	private AudioClip coldSnapSound;
 	private AudioClip coldSnapImpactSound;
 
@@ -27,7 +28,7 @@ public class ColdSnap : MonoBehaviour
         _enemy = GetComponent<Enemy>();
         Stun _stun = gameObject.AddComponent<Stun>();
         _stun.Duration = 0.4f;
-        rend = GetComponent<Renderer>();
+        render = GetComponent<Renderer>();
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -37,10 +38,9 @@ public class ColdSnap : MonoBehaviour
         // Assignments
         currentTickCooldown = TickCooldown;
 
-		// 1st Tick color change
-		materialColorHolder = rend.sharedMaterial.color;
-		coldSnapColor = Color.blue;
-		SetColor(rend.sharedMaterial, coldSnapColor);
+        // 1st Tick color change
+        originalMaterial = render.sharedMaterial;
+        render.sharedMaterial = snapMaterial;
 		
 		// 1st tick audio
         audioSource.PlayOneShot(coldSnapSound, 1);
@@ -57,7 +57,7 @@ public class ColdSnap : MonoBehaviour
 		{
 			currentTickCooldown -= Time.deltaTime;
             if (currentTickCooldown <= 0.4f)
-				SetColor(rend.sharedMaterial, materialColorHolder);
+				render.sharedMaterial = originalMaterial;
 		}
 	}
 
@@ -71,17 +71,10 @@ public class ColdSnap : MonoBehaviour
             currentTickCooldown = TickCooldown;
             _enemy.TakeDamage(tickDamage);
 
-            rend.sharedMaterial.color = coldSnapColor;
-			audioSource.PlayOneShot(coldSnapImpactSound, 1);
+            render.sharedMaterial = snapMaterial;
+            audioSource.PlayOneShot(coldSnapImpactSound, 1);
 			print("Snapped!");
 		}
-	}
-
-	public void SetColor(Material material, Color value) 
-	{
-		Color color = material.color;
-		color = value;
-		material.color = color;
 	}
 
     // Stop Cold Snap after duration is up and return material back to original.
@@ -93,8 +86,7 @@ public class ColdSnap : MonoBehaviour
 
     public void Die()
     {
-        if (rend.sharedMaterial.color != materialColorHolder)
-            SetColor(rend.sharedMaterial, materialColorHolder);
+        render.sharedMaterial = originalMaterial;
         Destroy(this);
     }
 
@@ -114,7 +106,12 @@ public class ColdSnap : MonoBehaviour
 		get { return tickDamage; }
 		set { tickDamage = value; }
 	}
-	public AudioClip ColdSnapSound
+    public Material SnapMaterial
+    {
+        get { return snapMaterial; }
+        set { snapMaterial = value; }
+    }
+    public AudioClip ColdSnapSound
 	{
 		get { return coldSnapSound; }
 		set { coldSnapSound = value; }

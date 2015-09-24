@@ -102,8 +102,13 @@ public class Invoker : MonoBehaviour
     // permutations of the element number combination. 
     public void Invoke()
 	{
-		// 1 = Quas, 2 = Wex, 3 = Exort
-		if(elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
+        // Update button visuals beforehand
+        Sprite previousSprite = null;
+        if (spells[1] != 0)
+            previousSprite = buttonD.image.sprite;
+
+        // 1 = Quas, 2 = Wex, 3 = Exort
+        if (elements[0] == 0 || elements[1] == 0 || elements[2] == 0){
 			print("Nothing to invoke");
 			audioSource.PlayOneShot(failSound, 1);
 		}
@@ -116,6 +121,7 @@ public class Invoker : MonoBehaviour
 				spellName = "Cold Snap";
                 if(spells[1] != 1)
 				    spells.Add(1);
+                buttonD.image.sprite = spellIcons[0];
             }
 			else if((elements[0] == 1 && elements[1] == 1 && elements[2] == 2) || (elements[0] == 1 && elements[1] == 2 && elements[2] == 1) || (elements[0] == 2 && elements[1] == 1 && elements[2] == 1))
 			{
@@ -193,8 +199,9 @@ public class Invoker : MonoBehaviour
             if (spells.Count > 2){
 				spells.RemoveAt(0);
 			}
-			// Incase there are more then 3 elements and Permutation is needed. Use Else instead to save code.
-			/*else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 3) || 
+
+            // Incase there are more then 3 elements and Permutation is needed. Use 'Else' instead to save code.
+            /*else if((elements[0] == 1 && elements[1] == 2 && elements[2] == 3) || 
 				        (elements[0] == 1 && elements[1] == 3 && elements[2] == 2) || 
 				        (elements[0] == 2 && elements[1] == 1 && elements[2] == 3) || 
 				        (elements[0] == 2 && elements[1] == 3 && elements[2] == 2) ||
@@ -205,7 +212,16 @@ public class Invoker : MonoBehaviour
 					spellName = "Deafening Blast";
 					}*/
 
-			audioSource.PlayOneShot(invokeSound, 1);
+            // Update button visuals afterhand
+            if (spells[0] != 0 && buttonD.image.sprite != previousSprite && previousSprite != null){
+                buttonF.image.sprite = previousSprite;
+                buttonF.interactable = true;
+            }
+            buttonD.interactable = true;
+
+            // Update Audio
+            audioSource.PlayOneShot(invokeSound, 1);
+
 			print("Invoked: " + spellName);
 		}
 	}
@@ -288,7 +304,7 @@ public class Invoker : MonoBehaviour
                 _cast.CastGhostWalk();
                 break;
 			case 3:
-				print ("Ulg, glib, Pblblblblb");
+                _cast.CastTornado();
 				break;
 			case 4:
 				print ("Ulg, glib, Pblblblblb");

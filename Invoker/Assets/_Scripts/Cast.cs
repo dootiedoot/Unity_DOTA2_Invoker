@@ -3,28 +3,37 @@ using System.Collections;
 
 public class Cast : MonoBehaviour 
 {
-	// VARIABLES
-	// spell attributes
+    // VARIABLES
+    // spell attributes
+    public Material ColdSnapMaterial;
 	public float coldSnapDuration;
 	public float coldSnapTickCooldown;
 	public float coldSnapTickDamage;
 
+    public Material GhostWalkMaterial;
     public float GhostWalkDuration;
 	public float GhostWalkEnemySlow;
 	public float GhostWalkSelfSlow;
 
+    public GameObject tornadoPrefab;
+    public float tornadoTravelTime;
+    public float tornadoBonusDamage;
+    public float tornadoLiftDuration;
+
     // Scripts
     private PlayerController _playerController;
 
-	// Audio
+    // Audio
+    private AudioSource audioSource;
 	public AudioClip[] spellSoundClips;
 
     void Awake()
     {
         _playerController = GetComponent<PlayerController>();
+        audioSource = GetComponent<AudioSource>();
     }
 
-	// Public method to call the Cold Snap method
+	// Public methods that are called to execute the spell methods
 	public void CastColdSnap()
     {
         if (GetComponent<ColdSnap>())
@@ -38,10 +47,15 @@ public class Cast : MonoBehaviour
             GetComponent<GhostWalk>().Die();
         StartCoroutine(GhostWalk(GhostWalkDuration, GhostWalkEnemySlow, GhostWalkSelfSlow));
 	}
+    public void CastTornado()
+    {
+        Tornado(tornadoTravelTime, tornadoBonusDamage, tornadoLiftDuration);
+    }
 
-	// Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
-	// clicked, attach the Cold Snap script and associated properties.
-	IEnumerator ColdSnap(float duration, float tickCooldown, float tickDamage)
+    // Coldsnap
+    // Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
+    // clicked, attach the Cold Snap script and associated properties.
+    IEnumerator ColdSnap(float duration, float tickCooldown, float tickDamage)
 	{
 		while(!Input.GetButtonUp("Fire1"))
 		{
@@ -56,6 +70,7 @@ public class Cast : MonoBehaviour
 				coldSnap.Duration = duration;
 				coldSnap.TickCooldown = tickCooldown;
 				coldSnap.TickDamage = tickDamage;
+                coldSnap.SnapMaterial = ColdSnapMaterial;
 				coldSnap.ColdSnapSound = spellSoundClips[0];
 				coldSnap.ColdSnapImpactSound = spellSoundClips[1];
             }
@@ -71,6 +86,7 @@ public class Cast : MonoBehaviour
         ghostWalk.Duration = duration;
         ghostWalk.SelfSlow = selfSlow;
         ghostWalk.EnemySlow = enemySlow;
+        ghostWalk.InvisMaterial = GhostWalkMaterial;
 		ghostWalk.GhostWalkSound = spellSoundClips[2];
 
         bool GhostWalk = true;
@@ -84,4 +100,17 @@ public class Cast : MonoBehaviour
 			yield return null;
 		}
 	}
+
+    // Tornado
+    void Tornado(float travelTime, float bonusDamage, float liftDuration)
+    {
+        GameObject tornado = Instantiate(tornadoPrefab, transform.position, Quaternion.identity) as GameObject;
+        Tornado _tornado = tornado.GetComponent<Tornado>();
+        _tornado.TravelTime = travelTime;
+        _tornado.BonusDamage = bonusDamage;
+        _tornado.LiftDuration = liftDuration;
+        _tornado.TornadoTravelSound = spellSoundClips[4];
+        _tornado.TornadoLiftSound = spellSoundClips[5];
+        audioSource.PlayOneShot(spellSoundClips[3], 1);
+    }
 }
