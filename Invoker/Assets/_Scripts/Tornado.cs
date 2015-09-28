@@ -52,7 +52,6 @@ public class Tornado : MonoBehaviour
             Stun _stun = other.gameObject.AddComponent<Stun>();
             _stun.Duration = liftDuration;
             GameObject tornado = Instantiate(miniTornado, other.transform.position, Quaternion.identity) as GameObject;
-            other.transform.SetParent(tornado.transform);
             MiniTornado _tornado = tornado.GetComponent<MiniTornado>();
             _tornado.LiftDuration = liftDuration;
             _tornado.Target = other.gameObject;

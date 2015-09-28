@@ -4,14 +4,15 @@ using System.Collections;
 public class MiniTornado : MonoBehaviour
 {
     // Attributes
-    private float liftDuration;
     public float liftHeight;
+    private float liftDuration;
     private GameObject target;
 
     // Animation
     private Animator animator;
 
     // Visuals
+    public Transform liftPoint;
     private GameObject particleObject;
     private ParticleSystem particle;
 
@@ -31,7 +32,10 @@ public class MiniTornado : MonoBehaviour
     {
         // Visuals
         particle.Play();
-        target.transform.position += new Vector3(0, liftHeight, 0);
+        //liftPoint.localPosition = new Vector3(0, liftHeight, 0);
+        //target.transform.position = target.transform.position + Vector3.up * liftHeight;
+        target.transform.SetParent(transform);
+        target.transform.position = transform.position + Vector3.up * liftHeight;
 
         // Audio
         audioSource.PlayOneShot(tornadoLiftSound, .5f);
