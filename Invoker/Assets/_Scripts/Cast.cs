@@ -49,7 +49,7 @@ public class Cast : MonoBehaviour
 	}
     public void CastTornado()
     {
-        Tornado(tornadoTravelTime, tornadoBonusDamage, tornadoLiftDuration);
+        StartCoroutine(Tornado(tornadoTravelTime, tornadoBonusDamage, tornadoLiftDuration));
     }
 
     // Coldsnap
@@ -102,15 +102,28 @@ public class Cast : MonoBehaviour
 	}
 
     // Tornado
-    void Tornado(float travelTime, float bonusDamage, float liftDuration)
+    IEnumerator Tornado(float travelTime, float bonusDamage, float liftDuration)
     {
-        GameObject tornado = Instantiate(tornadoPrefab, transform.position, Quaternion.identity) as GameObject;
-        Tornado _tornado = tornado.GetComponent<Tornado>();
-        _tornado.TravelTime = travelTime;
-        _tornado.BonusDamage = bonusDamage;
-        _tornado.LiftDuration = liftDuration;
-        _tornado.TornadoTravelSound = spellSoundClips[4];
-        _tornado.TornadoLiftSound = spellSoundClips[5];
-        audioSource.PlayOneShot(spellSoundClips[3], 1);
+        while (!Input.GetButtonUp("Fire1"))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            Physics.Raycast(ray, out hit);
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Vector3 relativePos = hit.point - transform.position;
+                Quaternion rotation = Quaternion.LookRotation(new Vector3(relativePos.x, 0, relativePos.z)); 
+                print("Casted: Tornado");
+                GameObject tornado = Instantiate(tornadoPrefab, transform.position, rotation) as GameObject;
+                Tornado _tornado = tornado.GetComponent<Tornado>();
+                _tornado.TravelTime = travelTime;
+                _tornado.BonusDamage = bonusDamage;
+                _tornado.LiftDuration = liftDuration;
+                _tornado.TornadoTravelSound = spellSoundClips[4];
+                audioSource.PlayOneShot(spellSoundClips[3], 1);
+            }
+            yield return null;
+        }
     }
 }

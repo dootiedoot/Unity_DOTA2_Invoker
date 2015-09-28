@@ -11,22 +11,27 @@ public class Tornado : MonoBehaviour
     private float liftDuration;
 
     // Components
+    public GameObject miniTornado;
+    private CapsuleCollider capsuleCol;
+
+    // Visuals
     private GameObject particleObject;
 
     // Audio
     private AudioSource audioSource;
     private AudioClip tornadoTravelSound;
-    private AudioClip tornadoLiftSound;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        particleObject = transform.GetChild(0).gameObject;
+        capsuleCol = GetComponent<CapsuleCollider>();
+        particleObject = transform.FindChild("Particles").gameObject;
     }
 
 	// Use this for initialization
 	void Start ()
     {
+        // Audio
         audioSource.PlayOneShot(tornadoTravelSound, .5f);
 
         // Start IEnumerator to destory object after x seconds.
@@ -38,6 +43,20 @@ public class Tornado : MonoBehaviour
     {
         transform.Translate(Vector3.forward * 12 * Time.deltaTime);
         particleObject.transform.Rotate(0, 0, 360 * Time.deltaTime); 
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Stun _stun = other.gameObject.AddComponent<Stun>();
+            _stun.Duration = liftDuration;
+            GameObject tornado = Instantiate(miniTornado, other.transform.position, Quaternion.identity) as GameObject;
+            other.transform.SetParent(tornado.transform);
+            MiniTornado _tornado = tornado.GetComponent<MiniTornado>();
+            _tornado.LiftDuration = liftDuration;
+            _tornado.Target = other.gameObject;
+        }
     }
 
     // Stop Cold Snap after duration is up and return material back to original.
@@ -72,10 +91,5 @@ public class Tornado : MonoBehaviour
     {
         get { return tornadoTravelSound; }
         set { tornadoTravelSound = value; }
-    }
-    public AudioClip TornadoLiftSound
-    {
-        get { return tornadoLiftSound; }
-        set { tornadoLiftSound = value; }
     }
 }

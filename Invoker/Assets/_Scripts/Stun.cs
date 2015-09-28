@@ -16,7 +16,7 @@ public class Stun : MonoBehaviour
         navMeshAgent.Stop();
     }
     
-    void Update()
+    void FixedUpdate()
     {
         // Wait x seconds before destroying the stun script.
         if (duration > 0)

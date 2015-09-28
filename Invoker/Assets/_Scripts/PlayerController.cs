@@ -109,8 +109,8 @@ public class PlayerController : MonoBehaviour
 		
 		if (navMeshAgent.remainingDistance <= shootDistance) 
 		{
-			transform.LookAt(target.transform);
 			Vector3 dirToShoot = target.transform.position - transform.position;
+			transform.LookAt(dirToShoot);
 			if (Time.time > nextFire)
 			{
 				nextFire = Time.time + shootRate;
