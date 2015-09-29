@@ -21,8 +21,7 @@ public class Cast : MonoBehaviour
     public float tornadoLiftDuration;
 
     public GameObject empPrefab;
-    public float empDuration;
-    public float empManaBurned;
+    public int empManaBurned;
     public float empDmgPerManaPercent;
     public float empManaGainPercent;
 
@@ -59,7 +58,7 @@ public class Cast : MonoBehaviour
     }
     public void CastEMP()
     {
-        StartCoroutine( EMP(empPrefab, empDuration, empManaBurned, empDmgPerManaPercent, empManaGainPercent) );
+        StartCoroutine( EMP(empPrefab, empManaBurned, empDmgPerManaPercent, empManaGainPercent) );
     }
 
     // Coldsnap
@@ -130,7 +129,6 @@ public class Cast : MonoBehaviour
                 _tornado.TravelTime = travelTime;
                 _tornado.BonusDamage = bonusDamage;
                 _tornado.LiftDuration = liftDuration;
-                _tornado.TornadoTravelSound = spellSoundClips[4];
                 audioSource.PlayOneShot(spellSoundClips[3], 1);
             }
             yield return null;
@@ -138,7 +136,7 @@ public class Cast : MonoBehaviour
     }
 
     // EMP
-    IEnumerator EMP(GameObject prefab, float duration, float manaBurned, float dmgPerBurnPercent, float manaGainPerBurnPercent)
+    IEnumerator EMP(GameObject prefab, float manaBurned, float dmgPerBurnPercent, float manaGainPerBurnPercent)
     {
         while (!Input.GetButtonUp("Fire1"))
         {
@@ -149,12 +147,13 @@ public class Cast : MonoBehaviour
             if (Input.GetButtonDown("Fire1"))
             {
                 print("Casted: EMP");
-                GameObject emp = Instantiate(prefab, hit.point + Vector3.up * 2, Quaternion.identity) as GameObject;
+                GameObject emp = Instantiate(prefab, hit.point + Vector3.up, Quaternion.identity) as GameObject;
                 EMP _emp = emp.GetComponent<EMP>();
+                _emp.ManaBurned = manaBurned;
+                _emp.DmgPerBurnPercent = dmgPerBurnPercent;
+                _emp.ManaGainPerBurnPercent = manaGainPerBurnPercent;
 
-                //_tornado.TornadoTravelSound = spellSoundClips[4];
-                audioSource.PlayOneShot(spellSoundClips[3], 1);
-            }
+}
             yield return null;
         }
     }

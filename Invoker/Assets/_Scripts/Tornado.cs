@@ -18,8 +18,8 @@ public class Tornado : MonoBehaviour
     private GameObject particleObject;
 
     // Audio
+    public AudioClip tornadoTravelSound;
     private AudioSource audioSource;
-    private AudioClip tornadoTravelSound;
 
     void Awake()
     {
@@ -85,10 +85,5 @@ public class Tornado : MonoBehaviour
     {
         get { return liftDuration; }
         set { liftDuration = value; }
-    }
-    public AudioClip TornadoTravelSound
-    {
-        get { return tornadoTravelSound; }
-        set { tornadoTravelSound = value; }
     }
 }
