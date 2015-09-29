@@ -14,8 +14,8 @@ public class MiniTornado : MonoBehaviour
 
     // Visuals
     public Transform liftPoint;
-    private GameObject particleObject;
     private ParticleSystem particle;
+    public GameObject particleObject;
 
     // Audio
     private AudioSource audioSource;
@@ -24,7 +24,6 @@ public class MiniTornado : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        particleObject = transform.FindChild("Particles").gameObject;
         particle = particleObject.GetComponent<ParticleSystem>();
     }
 

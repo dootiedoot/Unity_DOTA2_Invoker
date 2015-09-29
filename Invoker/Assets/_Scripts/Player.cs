@@ -1,66 +1,42 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour 
+public class Player : MonoBehaviour
 {
+
     // VARIABLES
-	private float health = 100;
-	private float maxHealth = 100;
+    private float health = 100;
+    private float maxHealth = 100;
     private float mana = 100;
     private float maxMana = 100;
-    public Transform[] wayPoints;
-    private int nextWayPoint;
-
-    public NavMeshAgent navMeshAgent;
-
-    private void Awake()
-    {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-    }
 
     void Start()
-	{
-		health = maxHealth;
+    {
+        health = maxHealth;
         mana = maxMana;
     }
 
-    void Update()
+    public void TakeDamage(float dmg)
     {
-        Patrol();
-    }
-
-    void Patrol()
-    {
-        navMeshAgent.destination = wayPoints[nextWayPoint].position;
-        //navMeshAgent.Resume();
-
-        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending)
-        {
-            nextWayPoint = (nextWayPoint + 1) % wayPoints.Length;
-        }
-    }
-
-    public void TakeDamage(float dmg) 
-	{
         BroadcastMessage("OnDamage", SendMessageOptions.DontRequireReceiver);
         AdjustHP(dmg);
-	}
+    }
 
     public void AdjustHP(float dmg)
     {
-		health += dmg;
-		
-		if(health > maxHealth)
-			health = maxHealth;
-		else if (health <= 0) 
-		{
-			//Die();
-		}
+        health += dmg;
+
+        if (health > maxHealth)
+            health = maxHealth;
+        else if (health <= 0)
+        {
+            //Die();
+        }
     }
 
     public void AdjustMP(float amt)
     {
-        mana += amt; 
+        mana += amt;
 
         if (mana > maxMana)
             mana = maxMana;

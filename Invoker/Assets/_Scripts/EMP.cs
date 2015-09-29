@@ -3,11 +3,11 @@ using System.Collections;
 
 public class EMP : MonoBehaviour
 {
-    public SphereCollider sphere;
-    public float radius;
-
     // VARIABLES
     // Attributes
+    public float radius;
+    private GameObject affector;
+    private Player _player;
     private float manaBurned;
     private float dmgPerBurnPercent;
     private float manaGainPerBurnPercent;
@@ -24,7 +24,7 @@ public class EMP : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        sphere.radius = radius;
+        _player = affector.GetComponent<Player>();
         audioSource.PlayOneShot(empSound, 1);
         StartCoroutine(destroy(2.9f));
     }
@@ -39,13 +39,18 @@ public class EMP : MonoBehaviour
 
     void Emp()
     {
-        RaycastHit hit;
-
-        // Cast a sphere wrapping character controller 10 meters forward
-        // to see if it is about to hit anything.
-        if (Physics.SphereCast(transform.position, radius, Vector3.down, out hit, 10))
+        // Cast a overlap sphere to see if it is about to hit anything.
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+        foreach(Collider col in hitColliders)
         {
-            sphere.transform.position = transform.position;
+            if(col.CompareTag("Enemy"))
+            {
+                print("Hit: "  + col.name);
+                Enemy _enemy = col.GetComponent<Enemy>();
+                _enemy.AdjustMP(-manaBurned);
+                _enemy.AdjustHP(-manaBurned * dmgPerBurnPercent);
+                _player.AdjustMP(manaBurned * manaGainPerBurnPercent);
+            }
         }
     }
 
@@ -55,6 +60,11 @@ public class EMP : MonoBehaviour
     }
 
     // Accessors and Mutators
+    public GameObject Affector
+    {
+        get { return affector; }
+        set { affector = value; }
+    }
     public float ManaBurned
     {
         get { return manaBurned; }
