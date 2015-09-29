@@ -7,6 +7,7 @@ public class MiniTornado : MonoBehaviour
     public float liftHeight;
     private float liftDuration;
     private GameObject target;
+    private string targetTag;
 
     // Animation
     private Animator animator;
@@ -25,17 +26,18 @@ public class MiniTornado : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         particleObject = transform.FindChild("Particles").gameObject;
         particle = particleObject.GetComponent<ParticleSystem>();
-        // Use this for initialization
     }
 
+    // Use this for initialization
     void Start () 
     {
+        targetTag = target.tag;
+        target.tag = "Untagged";
+
         // Visuals
         particle.Play();
-        //liftPoint.localPosition = new Vector3(0, liftHeight, 0);
-        //target.transform.position = target.transform.position + Vector3.up * liftHeight;
         target.transform.SetParent(transform);
-        target.transform.position = transform.position + Vector3.up * liftHeight;
+        target.transform.position = target.transform.position + Vector3.up * liftHeight;
 
         // Audio
         audioSource.PlayOneShot(tornadoLiftSound, .5f);
@@ -54,17 +56,21 @@ public class MiniTornado : MonoBehaviour
     // Stop ghost walk after duration is up and return material back to original.
     IEnumerator destroy(float Duration)
     {
-        yield return new WaitForSeconds(Duration-1);
+        yield return new WaitForSeconds(Duration-0.2f);
         particle.Stop();
         //animator.SetTrigger("Die");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.2f);
         Die();
     }
 
     // Destory object and return attributes to original state
     public void Die()
     {
+        // Restore attributes and visuals
+        target.tag = targetTag;
+        target.transform.position = target.transform.position + Vector3.down * liftHeight;
         target.transform.SetParent(null);
+
         Destroy(gameObject);
     }
     // Accessors and Mutators

@@ -20,6 +20,12 @@ public class Cast : MonoBehaviour
     public float tornadoBonusDamage;
     public float tornadoLiftDuration;
 
+    public GameObject empPrefab;
+    public float empDuration;
+    public float empManaBurned;
+    public float empDmgPerManaPercent;
+    public float empManaGainPercent;
+
     // Scripts
     private PlayerController _playerController;
 
@@ -38,18 +44,22 @@ public class Cast : MonoBehaviour
     {
         if (GetComponent<ColdSnap>())
             GetComponent<ColdSnap>().Die();
-        StartCoroutine(ColdSnap(coldSnapDuration, coldSnapTickCooldown, coldSnapTickDamage));
+        StartCoroutine( ColdSnap(coldSnapDuration, coldSnapTickCooldown, coldSnapTickDamage) );
 	}
 	public void CastGhostWalk()
     {
         _playerController.Target = null;
         if (GetComponent<GhostWalk>())
             GetComponent<GhostWalk>().Die();
-        StartCoroutine(GhostWalk(GhostWalkDuration, GhostWalkEnemySlow, GhostWalkSelfSlow));
+        StartCoroutine( GhostWalk(GhostWalkDuration, GhostWalkEnemySlow, GhostWalkSelfSlow) );
 	}
     public void CastTornado()
     {
-        StartCoroutine(Tornado(tornadoTravelTime, tornadoBonusDamage, tornadoLiftDuration));
+        StartCoroutine( Tornado(tornadoTravelTime, tornadoBonusDamage, tornadoLiftDuration) );
+    }
+    public void CastEMP()
+    {
+        StartCoroutine( EMP(empPrefab, empDuration, empManaBurned, empDmgPerManaPercent, empManaGainPercent) );
     }
 
     // Coldsnap
@@ -121,6 +131,28 @@ public class Cast : MonoBehaviour
                 _tornado.BonusDamage = bonusDamage;
                 _tornado.LiftDuration = liftDuration;
                 _tornado.TornadoTravelSound = spellSoundClips[4];
+                audioSource.PlayOneShot(spellSoundClips[3], 1);
+            }
+            yield return null;
+        }
+    }
+
+    // EMP
+    IEnumerator EMP(GameObject prefab, float duration, float manaBurned, float dmgPerBurnPercent, float manaGainPerBurnPercent)
+    {
+        while (!Input.GetButtonUp("Fire1"))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            Physics.Raycast(ray, out hit);
+            if (Input.GetButtonDown("Fire1"))
+            {
+                print("Casted: EMP");
+                GameObject emp = Instantiate(prefab, hit.point + Vector3.up * 2, Quaternion.identity) as GameObject;
+                EMP _emp = emp.GetComponent<EMP>();
+
+                //_tornado.TornadoTravelSound = spellSoundClips[4];
                 audioSource.PlayOneShot(spellSoundClips[3], 1);
             }
             yield return null;

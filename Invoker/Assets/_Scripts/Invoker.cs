@@ -307,7 +307,7 @@ public class Invoker : MonoBehaviour
                 _cast.CastTornado();
 				break;
 			case 4:
-				print ("Ulg, glib, Pblblblblb");
+                _cast.CastEMP();
 				break;
 			case 5:
 				print ("Ulg, glib, Pblblblblb");

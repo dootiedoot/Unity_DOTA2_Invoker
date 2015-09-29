@@ -13,7 +13,8 @@ public class Stun : MonoBehaviour
 
     void Start ()
     {
-        navMeshAgent.Stop();
+        navMeshAgent.enabled = false;
+        //navMeshAgent.Stop();
     }
     
     void FixedUpdate()
@@ -25,7 +26,8 @@ public class Stun : MonoBehaviour
         }
         else
         {
-            navMeshAgent.Resume();
+            navMeshAgent.enabled = true;
+            //navMeshAgent.Resume();
             Destroy(this);
         }
     }
