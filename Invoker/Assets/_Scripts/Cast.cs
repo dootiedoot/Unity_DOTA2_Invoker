@@ -149,6 +149,7 @@ public class Cast : MonoBehaviour
                 print("Casted: EMP");
                 GameObject emp = Instantiate(prefab, hit.point + Vector3.up, Quaternion.identity) as GameObject;
                 EMP _emp = emp.GetComponent<EMP>();
+                _emp.Affector = gameObject;
                 _emp.ManaBurned = manaBurned;
                 _emp.DmgPerBurnPercent = dmgPerBurnPercent;
                 _emp.ManaGainPerBurnPercent = manaGainPerBurnPercent;

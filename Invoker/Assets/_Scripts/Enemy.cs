@@ -4,10 +4,12 @@ using System.Collections;
 public class Enemy : MonoBehaviour 
 {
     // VARIABLES
-	private float health = 100;
-	private float maxHealth = 100;
-    private float mana = 100;
-    private float maxMana = 100;
+    [SerializeField]
+    private float health = 0;
+	private float maxHealth = 1000;
+    [SerializeField]
+    private float mana = 0;
+    private float maxMana = 1000;
     public Transform[] wayPoints;
     private int nextWayPoint;
 

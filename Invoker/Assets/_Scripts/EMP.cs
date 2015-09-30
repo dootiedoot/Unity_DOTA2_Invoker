@@ -45,11 +45,11 @@ public class EMP : MonoBehaviour
         {
             if(col.CompareTag("Enemy"))
             {
-                print("Hit: "  + col.name);
                 Enemy _enemy = col.GetComponent<Enemy>();
                 _enemy.AdjustMP(-manaBurned);
                 _enemy.AdjustHP(-manaBurned * dmgPerBurnPercent);
                 _player.AdjustMP(manaBurned * manaGainPerBurnPercent);
+                print("Mana burned: "  + col.name);
             }
         }
     }

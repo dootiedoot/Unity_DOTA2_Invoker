@@ -61,6 +61,12 @@ public class PlayerController : MonoBehaviour
                 selectionMarker.transform.position = hit.transform.position + transform.up * 2;
                 selectionMarkerRend.material.SetColor("_Color", Color.green);
             }
+            else if (hit.collider.CompareTag("Player"))
+            {
+                selectionMarker.SetActive(true);
+                selectionMarker.transform.position = hit.transform.position + transform.up * 2;
+                selectionMarkerRend.material.SetColor("_Color", Color.blue);
+            }
             else
             {
                 selectionMarker.SetActive(false);
