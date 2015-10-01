@@ -9,21 +9,30 @@ public class Cast : MonoBehaviour
 	public float coldSnapDuration;
 	public float coldSnapTickCooldown;
 	public float coldSnapTickDamage;
+    public float coldSnapCooldown;
 
     public Material GhostWalkMaterial;
-    public float GhostWalkDuration;
-	public float GhostWalkEnemySlow;
-	public float GhostWalkSelfSlow;
+    public float ghostWalkDuration;
+	public float ghostWalkEnemySlow;
+	public float ghostWalkSelfSlow;
+    public float ghostWalkCooldown;
 
     public GameObject tornadoPrefab;
     public float tornadoTravelTime;
     public float tornadoBonusDamage;
     public float tornadoLiftDuration;
+    public float tornadoCooldown;
 
     public GameObject empPrefab;
     public int empManaBurned;
     public float empDmgPerManaPercent;
     public float empManaGainPercent;
+    public float empCooldown;
+
+    public GameObject alacrityPrefab;
+    public float alacrityDuration;
+    public float alacrityAtkSpeed;
+    public float alacrityBonusDamage;
 
     // Scripts
     private PlayerController _playerController;
@@ -50,7 +59,7 @@ public class Cast : MonoBehaviour
         _playerController.Target = null;
         if (GetComponent<GhostWalk>())
             GetComponent<GhostWalk>().Die();
-        StartCoroutine( GhostWalk(GhostWalkDuration, GhostWalkEnemySlow, GhostWalkSelfSlow) );
+        StartCoroutine( GhostWalk(ghostWalkDuration, ghostWalkEnemySlow, ghostWalkSelfSlow, ghostWalkCooldown) );
 	}
     public void CastTornado()
     {
@@ -59,6 +68,10 @@ public class Cast : MonoBehaviour
     public void CastEMP()
     {
         StartCoroutine( EMP(empPrefab, empManaBurned, empDmgPerManaPercent, empManaGainPercent) );
+    }
+    public void CastAlacrity()
+    {
+        StartCoroutine(Alacrity(alacrityPrefab, alacrityDuration, alacrityAtkSpeed, alacrityBonusDamage));
     }
 
     // Coldsnap
@@ -88,7 +101,7 @@ public class Cast : MonoBehaviour
 	}
 
     // Ghost Walk
-	IEnumerator GhostWalk(float duration, float enemySlow, float selfSlow)
+	IEnumerator GhostWalk(float duration, float enemySlow, float selfSlow, float cooldown)
 	{
 		print("Casted: Ghost Walk");
         GhostWalk ghostWalk = gameObject.AddComponent<GhostWalk>();
@@ -108,6 +121,15 @@ public class Cast : MonoBehaviour
 			}
 			yield return null;
 		}
+        // Cooldown
+        /*print("GW on Cooldown");
+        while(cooldown > 0)
+        {
+            cooldown -= Time.deltaTime;
+            yield return new WaitForSeconds(1);
+            if (cooldown <= 0)
+                print("GW ready");
+        }*/
 	}
 
     // Tornado
@@ -153,8 +175,31 @@ public class Cast : MonoBehaviour
                 _emp.ManaBurned = manaBurned;
                 _emp.DmgPerBurnPercent = dmgPerBurnPercent;
                 _emp.ManaGainPerBurnPercent = manaGainPerBurnPercent;
+            }
+            yield return null;
+        }
+    }
 
-}
+    // Alacrity
+    IEnumerator Alacrity(GameObject prefab, float duration, float attackSpeed, float bonusDamage)
+    {
+        while (!Input.GetButtonUp("Fire1"))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            Physics.Raycast(ray, out hit);
+            if ((hit.collider.CompareTag("Player") || hit.collider.CompareTag("Ally")) && Input.GetButtonDown("Fire1"))
+            {
+                print("Casted: Alacrity on " + hit.collider.name);
+                GameObject alacrity = Instantiate(prefab, hit.transform.position + transform.up * 2, Quaternion.identity) as GameObject;
+                alacrity.transform.SetParent(hit.transform);
+                Alacrity _alacrity = alacrity.GetComponent<Alacrity>();
+                _alacrity.Duration = duration;
+                _alacrity.AttackSpeed = attackSpeed;
+                _alacrity.BonusDamage = bonusDamage;
+
+            }
             yield return null;
         }
     }

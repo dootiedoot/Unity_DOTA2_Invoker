@@ -42,7 +42,7 @@ public class Missile : MonoBehaviour
 		if (other.CompareTag("Enemy") && other.gameObject == target)
 		{
             //other.SendMessage("TakeDamage", damage); // Attemp to call TakeDamage() anywhere.
-            other.GetComponent<Enemy>().TakeDamage(damage);
+            other.GetComponent<Enemy>().TakeDamage(-damage);
 			Destroy(gameObject, 0.5f);
 
             audioSource.PlayOneShot(missleImpactSound, .5f);

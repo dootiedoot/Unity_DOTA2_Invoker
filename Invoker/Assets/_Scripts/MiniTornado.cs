@@ -6,6 +6,7 @@ public class MiniTornado : MonoBehaviour
     // Attributes
     public float liftHeight;
     private float liftDuration;
+    private float damage;
     private GameObject target;
     private string targetTag;
 
@@ -68,6 +69,7 @@ public class MiniTornado : MonoBehaviour
         // Restore attributes and visuals
         target.tag = targetTag;
         target.transform.position = target.transform.position + Vector3.down * liftHeight;
+        target.GetComponent<Enemy>().AdjustHP(-damage);
         target.transform.SetParent(null);
 
         Destroy(gameObject);
@@ -77,6 +79,11 @@ public class MiniTornado : MonoBehaviour
     {
         get { return liftDuration; }
         set { liftDuration = value; }
+    }
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
     }
     public GameObject Target
     {

@@ -4,8 +4,8 @@ using System.Collections;
 public class PlayerController : MonoBehaviour 
 {
 	public float shootDistance = 10f;
-	public float shootRate = .5f;
-	public float damage = 1;
+    [SerializeField] private float attackSpeed = .5f;
+    [SerializeField] private float damage = 1;
 	public GameObject misslePrefab;
     public GameObject locationMarker;
     public GameObject selectionMarker;
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
 			transform.LookAt(dirToShoot);
 			if (Time.time > nextFire)
 			{
-				nextFire = Time.time + shootRate;
+				nextFire = Time.time + attackSpeed;
 				GameObject tempMissile = Instantiate(misslePrefab, transform.position + transform.up + transform.forward, Quaternion.identity) as GameObject;
 				tempMissile.GetComponent<Missile>().Damage = damage;
                 tempMissile.GetComponent<Missile>().Affecter = affecter;
@@ -135,5 +135,15 @@ public class PlayerController : MonoBehaviour
     {
         get { return target; }
         set { target = value; }
+    }
+    public float AttackSpeed
+    {
+        get { return attackSpeed; }
+        set { attackSpeed = value; }
+    }
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
     }
 }

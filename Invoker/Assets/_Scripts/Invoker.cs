@@ -310,7 +310,7 @@ public class Invoker : MonoBehaviour
                 _cast.CastEMP();
 				break;
 			case 5:
-				print ("Ulg, glib, Pblblblblb");
+				_cast.CastAlacrity();
 				break;
 			case 6:
 				print ("Ulg, glib, Pblblblblb");

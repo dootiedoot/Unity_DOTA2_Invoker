@@ -39,7 +39,7 @@ public class Tornado : MonoBehaviour
     }
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate()
     {
         transform.Translate(Vector3.forward * 12 * Time.deltaTime);
         particleObject.transform.Rotate(0, 0, 360 * Time.deltaTime); 
@@ -54,6 +54,7 @@ public class Tornado : MonoBehaviour
             GameObject tornado = Instantiate(miniTornado, other.transform.position, Quaternion.identity) as GameObject;
             MiniTornado _tornado = tornado.GetComponent<MiniTornado>();
             _tornado.LiftDuration = liftDuration;
+            _tornado.Damage = 70 + bonusDamage;
             _tornado.Target = other.gameObject;
         }
     }
