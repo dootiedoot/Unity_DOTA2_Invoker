@@ -28,14 +28,14 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        Patrol();
+        if(!GetComponent<Stun>())
+            Patrol();
     }
 
     void Patrol()
     {
         navMeshAgent.destination = wayPoints[nextWayPoint].position;
         //navMeshAgent.Resume();
-
         if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending)
         {
             nextWayPoint = (nextWayPoint + 1) % wayPoints.Length;

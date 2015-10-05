@@ -313,7 +313,7 @@ public class Invoker : MonoBehaviour
 				_cast.CastAlacrity();
 				break;
 			case 6:
-				print ("Ulg, glib, Pblblblblb");
+				_cast.CastChaosMeteor();
 				break;
 			case 7:
 				print ("Ulg, glib, Pblblblblb");

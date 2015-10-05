@@ -73,6 +73,10 @@ public class Cast : MonoBehaviour
     {
         StartCoroutine(Alacrity(alacrityPrefab, alacrityDuration, alacrityAtkSpeed, alacrityBonusDamage));
     }
+    public void CastChaosMeteor()
+    {
+        StartCoroutine(Alacrity(alacrityPrefab, alacrityDuration, alacrityAtkSpeed, alacrityBonusDamage));
+    }
 
     // Coldsnap
     // Raycast at the mouse position until the Left-Click is performed. If an enemy falls under the Raycast when 
@@ -199,6 +203,34 @@ public class Cast : MonoBehaviour
                 _alacrity.AttackSpeed = attackSpeed;
                 _alacrity.BonusDamage = bonusDamage;
 
+            }
+            yield return null;
+        }
+    }
+
+    // Chaos Meteor
+    // WEX: 1.55/2.05/2.6/3.1/3.65/4.15/4.7/(5.25) travel time
+    IEnumerator ChaosMeteor(GameObject prefab, float travelTime, float damage, float burnDamage)
+    {
+        while (!Input.GetButtonUp("Fire1"))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            Physics.Raycast(ray, out hit);
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Vector3 relativePos = hit.point - transform.position;
+                Quaternion rotation = Quaternion.LookRotation(new Vector3(relativePos.x, 0, relativePos.z));
+                /*
+                print("Casted: Chaos Meteor");
+                GameObject alacrity = Instantiate(prefab, hit.transform.position + transform.up * 2, Quaternion.identity) as GameObject;
+                alacrity.transform.SetParent(hit.transform);
+                Alacrity _alacrity = alacrity.GetComponent<Alacrity>();
+                _alacrity.Duration = duration;
+                _alacrity.AttackSpeed = attackSpeed;
+                _alacrity.BonusDamage = bonusDamage;
+                */
             }
             yield return null;
         }

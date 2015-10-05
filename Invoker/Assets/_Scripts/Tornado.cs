@@ -12,7 +12,6 @@ public class Tornado : MonoBehaviour
 
     // Components
     public GameObject miniTornado;
-    private CapsuleCollider capsuleCol;
 
     // Visuals
     private GameObject particleObject;
@@ -24,7 +23,6 @@ public class Tornado : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        capsuleCol = GetComponent<CapsuleCollider>();
         particleObject = transform.FindChild("Particles").gameObject;
     }
 
