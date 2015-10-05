@@ -34,6 +34,11 @@ public class Cast : MonoBehaviour
     public float alacrityAtkSpeed;
     public float alacrityBonusDamage;
 
+    public GameObject Meteor;
+    public float MeteortravelTime;
+    public float MeteorDamage;
+    public float MeteorBurnDamage;
+
     // Scripts
     private PlayerController _playerController;
 
@@ -75,7 +80,7 @@ public class Cast : MonoBehaviour
     }
     public void CastChaosMeteor()
     {
-        StartCoroutine(Alacrity(alacrityPrefab, alacrityDuration, alacrityAtkSpeed, alacrityBonusDamage));
+        StartCoroutine(ChaosMeteor(Meteor, MeteortravelTime, MeteorDamage, MeteorBurnDamage));
     }
 
     // Coldsnap
@@ -222,15 +227,13 @@ public class Cast : MonoBehaviour
             {
                 Vector3 relativePos = hit.point - transform.position;
                 Quaternion rotation = Quaternion.LookRotation(new Vector3(relativePos.x, 0, relativePos.z));
-                /*
+                transform.rotation = rotation;
                 print("Casted: Chaos Meteor");
-                GameObject alacrity = Instantiate(prefab, hit.transform.position + transform.up * 2, Quaternion.identity) as GameObject;
-                alacrity.transform.SetParent(hit.transform);
-                Alacrity _alacrity = alacrity.GetComponent<Alacrity>();
-                _alacrity.Duration = duration;
-                _alacrity.AttackSpeed = attackSpeed;
-                _alacrity.BonusDamage = bonusDamage;
-                */
+                GameObject MeteorObj = Instantiate(prefab, transform.position + transform.forward * 5, rotation) as GameObject;
+                ChaosMeteor _chaosMeteor = MeteorObj.GetComponent<ChaosMeteor>();
+                _chaosMeteor.TravelTime = travelTime;
+                _chaosMeteor.Damage = damage;
+                _chaosMeteor.BurnDamage = burnDamage;
             }
             yield return null;
         }
