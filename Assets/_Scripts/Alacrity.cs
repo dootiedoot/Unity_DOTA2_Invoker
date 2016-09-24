@@ -7,7 +7,8 @@ public class Alacrity : MonoBehaviour
     private float duration;
     private float attackSpeed;
     private float bonusDamage;
-
+    
+    //  References
     private PlayerController _player;
 
     // Audio
@@ -16,12 +17,14 @@ public class Alacrity : MonoBehaviour
 
     void Awake()
     {
+        //  Find and assign references
         audioSource = GetComponent<AudioSource>();
     }
 
     // Use this for initialization
     void Start ()
     {
+        //  Get player controller and assign bonus value to stats
         _player = transform.parent.GetComponent<PlayerController>();
         _player.AttackSpeed /= attackSpeed;
         _player.Damage += bonusDamage;
@@ -36,6 +39,7 @@ public class Alacrity : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //  Rotate indefinately for visual effect
         transform.Rotate(120 * Time.deltaTime, 120 * Time.deltaTime, 120 * Time.deltaTime);
     }
 
@@ -45,7 +49,8 @@ public class Alacrity : MonoBehaviour
         yield return new WaitForSeconds(Duration);
         Die();
     }
-
+    
+    //  Process death of spell
     public void Die()
     {
         _player.AttackSpeed *= attackSpeed;
